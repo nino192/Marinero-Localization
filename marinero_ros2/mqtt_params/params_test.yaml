@@ -1,0 +1,13 @@
+mqtt_client:
+  ros__parameters:
+    broker:
+      host: localhost
+      port: 1883
+    bridge:
+      mqtt2ros:
+        mqtt_topics: 
+          - silabs/aoa/angle/ble-pd-0C4314F46B72/ble-pd-804B5056BAA0
+        silabs/aoa/angle/ble-pd-0C4314F46B72/ble-pd-804B5056BAA0:
+          ros_topic: /angle/ros
+          primitive: true
+          

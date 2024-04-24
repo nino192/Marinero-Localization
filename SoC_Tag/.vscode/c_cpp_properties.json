@@ -1,0 +1,13 @@
+{
+    "configurations": [
+        {
+            "name": "SoC_Tag",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "defines": [],
+            "compilerPath": ""
+        }
+    ],
+    "version": 4
+}

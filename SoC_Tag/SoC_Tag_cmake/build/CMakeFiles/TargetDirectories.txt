@@ -1,0 +1,4 @@
+/home/nino/Marinero_DOA_BLE/SoC_Tag/SoC_Tag_cmake/build/CMakeFiles/slc_SoC_Tag.dir
+/home/nino/Marinero_DOA_BLE/SoC_Tag/SoC_Tag_cmake/build/CMakeFiles/SoC_Tag.dir
+/home/nino/Marinero_DOA_BLE/SoC_Tag/SoC_Tag_cmake/build/CMakeFiles/edit_cache.dir
+/home/nino/Marinero_DOA_BLE/SoC_Tag/SoC_Tag_cmake/build/CMakeFiles/rebuild_cache.dir

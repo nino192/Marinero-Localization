@@ -1,0 +1,29 @@
+{
+    "files.associations": {
+        "system.h": "c",
+        "sl_bt_api.h": "c",
+        "app_signal.h": "c",
+        "sl_status.h": "c",
+        "stdint.h": "c",
+        "stdint-gcc.h": "c",
+        "stdbool.h": "c",
+        "stddef.h": "c",
+        "app.h": "c",
+        "signal.h": "c",
+        "app_timer.h": "c",
+        "app_timer_posix.h": "c",
+        "uart.h": "c",
+        "aoa_cte.h": "c",
+        "sl_bgapi.h": "c",
+        "sl_bt_api_compatibility.h": "c",
+        "mqtt.h": "c",
+        "aoa_types.h": "c",
+        "ncp_host.h": "c",
+        "aoa_angle.h": "c",
+        "app_log_config.h": "c",
+        "app_log.h": "c",
+        "antenna_array.h": "c",
+        "aoa_angle_config.h": "c",
+        "aoa_parse.h": "c"
+    }
+}

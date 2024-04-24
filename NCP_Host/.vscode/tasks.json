@@ -1,0 +1,29 @@
+{
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "make debug",
+            "options": {
+                "cwd": "${workspaceFolder}/app/bluetooth/example_host/bt_aoa_host_locator"
+            },
+            "command": "make",
+            "args": [
+                "debug"
+            ],
+            "group": "build"
+        },
+        {
+            "type": "shell",
+            "label": "make debug marinero",
+            "options": {
+                "cwd": "${workspaceFolder}/app/bluetooth/marinero_bt_AoA_host"
+            },
+            "command": "make",
+            "args": [
+                "debug"
+            ],
+            "group": "build"
+        }
+    ],
+    "version": "2.0.0"
+}
