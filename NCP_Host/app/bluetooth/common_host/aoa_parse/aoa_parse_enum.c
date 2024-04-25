@@ -36,12 +36,15 @@
 // Locator reporting mode
 
 static const char *report_mode_str[] = {
-  "ANGLE",        // Default
-  "ANGLE_REPORT", // Alias 1
-  "ANGLEREPORT",  // Alias 2
-  "IQREPORT",     // Default
-  "IQ_REPORT",    // Alias 1
-  "IQ"            // Alias 2
+  "ANGLE",            // Default
+  "ANGLE_REPORT",     // Alias 1
+  "ANGLEREPORT",      // Alias 2
+  "IQREPORT",         // Default
+  "IQ_REPORT",        // Alias 1
+  "IQ",               // Alias 2
+  "POSITION",         // Default
+  "POSITION_REPORT",  // Alias 1
+  "POSITIONREPORT"    // Alias 2
 };
 
 static const aoa_report_mode_t report_mode_enum[] = {
@@ -50,7 +53,10 @@ static const aoa_report_mode_t report_mode_enum[] = {
   ANGLE_REPORT,
   IQ_REPORT,
   IQ_REPORT,
-  IQ_REPORT
+  IQ_REPORT,
+  POSITION_REPORT,
+  POSITION_REPORT,
+  POSITION_REPORT
 };
 
 #define REPORT_MODE_COUNT    (sizeof(report_mode_str) / sizeof(report_mode_str[0]))

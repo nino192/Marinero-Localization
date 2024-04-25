@@ -32,7 +32,7 @@
                     "ignoreFailures": true
                 }
             ],
-            //"preLaunchTask": "make debug"
+            "preLaunchTask": "make debug"
         },
         {
             "name": "(gdb) Debug marinero launch",
@@ -41,7 +41,9 @@
             "program": "${workspaceFolder}/app/bluetooth/marinero_bt_AoA_host/exe/marinero_bt_AoA_host",
             "args": [
                 "-u",
-                "/dev/ttyACM1"
+                "/dev/ttyACM1",
+                "-c",
+                "${workspaceFolder}/app/bluetooth/marinero_bt_AoA_host/config/marinero_locator_config.json"
             ],
             "stopAtEntry": true,
             "cwd": "${fileDirname}",
@@ -60,7 +62,7 @@
                     "ignoreFailures": true
                 }
             ],
-            //"preLaunchTask": "make debug marinero"
+            "preLaunchTask": "make debug marinero"
         }
     ]
 }

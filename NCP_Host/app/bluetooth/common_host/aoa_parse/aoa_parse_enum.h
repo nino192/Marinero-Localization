@@ -38,6 +38,7 @@
 typedef enum {
   ANGLE_REPORT = 0,
   IQ_REPORT,
+  POSITION_REPORT
 } aoa_report_mode_t;
 
 /**

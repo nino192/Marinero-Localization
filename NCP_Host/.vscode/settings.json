@@ -24,6 +24,9 @@
         "app_log.h": "c",
         "antenna_array.h": "c",
         "aoa_angle_config.h": "c",
-        "aoa_parse.h": "c"
+        "aoa_parse.h": "c",
+        "marinero_positioning.h": "c",
+        "unistd.h": "c",
+        "aoa_parse_enum.h": "c"
     }
 }

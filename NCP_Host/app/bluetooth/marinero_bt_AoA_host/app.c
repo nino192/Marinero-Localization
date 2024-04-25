@@ -56,6 +56,9 @@
 
 #include "ncp_reset.h"
 
+//marinero
+#include "marinero_positioning.h"
+
 // Optstring argument for getopt.
 #define OPTSTRING      NCP_HOST_OPTSTRING APP_LOG_OPTSTRING "m:c:h"
 
@@ -74,7 +77,7 @@
   "        <config>         Path to the configuration file\n"                  \
   "    -h  Print this help message.\n"
 
-#define DEFAULT_REPORT_MODE           ANGLE_REPORT
+#define DEFAULT_REPORT_MODE           POSITION_REPORT
 
 static sl_status_t get_board_type(antenna_array_board_t *board_type);
 static void parse_config_file(const char *file_name);
@@ -106,7 +109,7 @@ static char *config_file = NULL;
 static antenna_array_board_t board = ANTENNA_ARRAY_BOARD_UNKNOWN;
 
 /**************************************************************************//**
- * Application Init.
+ * Application Init. /zove ju app init iz maina
  *****************************************************************************/
 void app_init(int argc, char *argv[])
 {
@@ -181,7 +184,7 @@ void app_init(int argc, char *argv[])
 }
 
 /**************************************************************************//**
- * Application Process Action.
+ * Application Process Action. /zove je main
  *****************************************************************************/
 void app_process_action(void)
 {
@@ -189,7 +192,7 @@ void app_process_action(void)
 }
 
 /**************************************************************************//**
- * Application Deinit.
+ * Application Deinit. /zove je main
  *****************************************************************************/
 void app_deinit(void)
 {
@@ -208,7 +211,7 @@ void app_deinit(void)
  * Bluetooth stack event handler.
  * This overrides the dummy weak implementation.
  *
- * @param[in] evt Event coming from the Bluetooth stack.
+ * @param[in] evt Event coming from the Bluetooth stack.   /zove ju main, sl_system_process_action->sl_bt_step->sl_bt_on_evt
  *****************************************************************************/
 void sl_bt_on_event(sl_bt_msg_t *evt)
 {
@@ -294,7 +297,7 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
 }
 
 /**************************************************************************//**
- * Subscribe for config topic.
+ * Subscribe for config topic.  /zove ju ovdje u fileu, u bt_on_evt
  *****************************************************************************/
 static void subscribe_config(void)
 {
@@ -314,7 +317,7 @@ static void subscribe_config(void)
 }
 
 /**************************************************************************//**
- * Check the received topic
+ * Check the received topic                                                               /updatea recieved topic "on the fly", zove ga on_message
  *****************************************************************************/
 static sl_status_t check_config_topic(const char* topic)
 {
@@ -334,7 +337,7 @@ static sl_status_t check_config_topic(const char* topic)
 }
 
 /**************************************************************************//**
- * MQTT message arrived callback.
+ * MQTT message arrived callback.                                                           //updatea recieved topic "on the fly", hendla ga mosquitto, mene ne zanima
  *****************************************************************************/
 static void on_message(mqtt_handle_t *handle,
                        const char *topic,
@@ -352,7 +355,7 @@ static void on_message(mqtt_handle_t *handle,
 }
 
 /**************************************************************************//**
- * IQ report callback.
+ * IQ report callback. //zove ga aoa_cte_bt_on_event /ovo rasturam
  *****************************************************************************/
 void aoa_cte_on_iq_report(aoa_db_entry_t *tag, aoa_iq_report_t *iq_report)
 {
@@ -364,36 +367,67 @@ void aoa_cte_on_iq_report(aoa_db_entry_t *tag, aoa_iq_report_t *iq_report)
   size_t size;
   enum sl_rtl_error_code ec;
   aoa_angle_t angle;
+  aoa_position_t position;
 
-  if (report_mode == IQ_REPORT) {
-    size = sizeof(AOA_TOPIC_IQ_REPORT_PRINT);
-    topic_template = AOA_TOPIC_IQ_REPORT_PRINT;
+  switch(report_mode){
+    //IQ_REPORT mode
+    case (IQ_REPORT):
+      size = sizeof(AOA_TOPIC_IQ_REPORT_PRINT);
+      topic_template = AOA_TOPIC_IQ_REPORT_PRINT;
 
-    // Compile payload
-    sc = aoa_serialize_iq_report(iq_report, &payload);
-  } else {
-    size = sizeof(AOA_TOPIC_ANGLE_PRINT);
-    topic_template = AOA_TOPIC_ANGLE_PRINT;
+      // Compile payload
+      sc = aoa_serialize_iq_report(iq_report, &payload);
+      break;
+    //ANGLE_REPORT mode
+    case (ANGLE_REPORT):
+      size = sizeof(AOA_TOPIC_ANGLE_PRINT);
+      topic_template = AOA_TOPIC_ANGLE_PRINT;
 
-    ec = aoa_calculate((aoa_state_t *)tag->user_data,
-                       iq_report,
-                       &angle,
-                       locator_id);
+      ec = aoa_calculate((aoa_state_t *)tag->user_data,
+                        iq_report,
+                        &angle,
+                        locator_id);
 
-    if (ec == SL_RTL_ERROR_ESTIMATION_IN_PROGRESS) {
-      // No valid angles are available yet.
-      return;
+      if (ec == SL_RTL_ERROR_ESTIMATION_IN_PROGRESS) {
+        // No valid angles are available yet.
+        return;
+      }
+      app_assert(ec == SL_RTL_ERROR_SUCCESS,
+                "[E: %d] Failed to calculate angle." APP_LOG_NL,
+                ec);
+
+      // Store the latest sequence number for the tag.
+      tag->sequence = iq_report->event_counter;
+
+      // Compile payload
+      sc = aoa_serialize_angle(&angle, &payload);
+      break;
+    //POSITION_REPORT mode
+    default:
+      size = sizeof(AOA_TOPIC_POSITION_PRINT);
+      topic_template = AOA_TOPIC_POSITION_PRINT;
+
+      ec = marinero_position((aoa_state_t *)tag->user_data,
+                        iq_report,
+                        &position,
+                        locator_id);
+
+      if (ec == SL_RTL_ERROR_ESTIMATION_IN_PROGRESS) {
+        // No valid positions are available yet.
+        return;
+      }
+      app_assert(ec == SL_RTL_ERROR_SUCCESS,
+                "[E: %d] Failed to calculate position." APP_LOG_NL,
+                ec);
+
+      // Store the latest sequence number for the tag.
+      tag->sequence = iq_report->event_counter;
+      
+      // Compile payload
+      sc = aoa_serialize_position(&position, &payload);
+
     }
-    app_assert(ec == SL_RTL_ERROR_SUCCESS,
-               "[E: %d] Failed to calculate angle." APP_LOG_NL,
-               ec);
-
-    // Store the latest sequence number for the tag.
-    tag->sequence = iq_report->event_counter;
-
-    // Compile payload
-    sc = aoa_serialize_angle(&angle, &payload);
-  }
+  
   app_assert(sc == SL_STATUS_OK,
              "[E: 0x%04x] Failed to serialize the payload." APP_LOG_NL,
              (int)sc);
@@ -416,7 +450,7 @@ void aoa_cte_on_iq_report(aoa_db_entry_t *tag, aoa_iq_report_t *iq_report)
 }
 
 /**************************************************************************//**
- * Get the board type of the NCP target
+ * Get the board type of the NCP target  //poziva se u sl_bt_on_event
  *
  * @param[out] board_type Board type defined in antenna_array_board_t
  * @return SL_STATUS_OK if successful. Error code otherwise.
@@ -447,7 +481,7 @@ static sl_status_t get_board_type(antenna_array_board_t *board_type)
 }
 
 /**************************************************************************//**
- * Configuration file parser
+ * Configuration file parser //poziva se u sl_bt_on_event
  *****************************************************************************/
 static void parse_config_file(const char *file_name)
 {
@@ -459,7 +493,7 @@ static void parse_config_file(const char *file_name)
 }
 
 /**************************************************************************//**
- * Configuration parser
+ * Configuration parser //poziva se u parse_config_file
  *****************************************************************************/
 static void parse_config(const char *config)
 {
@@ -729,7 +763,7 @@ static void parse_config(const char *config)
 }
 
 /**************************************************************************//**
- * Tag added callback.
+ * Tag added callback.  //poziva se iz cte_conn_less
  *****************************************************************************/
 void aoa_db_on_tag_added(aoa_db_entry_t *tag)
 {
@@ -759,7 +793,7 @@ void aoa_db_on_tag_added(aoa_db_entry_t *tag)
 }
 
 /**************************************************************************//**
- * Tag removed callback.
+ * Tag removed callback.  //poziva se iz cte_conn_less
  *****************************************************************************/
 void aoa_db_on_tag_removed(aoa_db_entry_t *tag)
 {
