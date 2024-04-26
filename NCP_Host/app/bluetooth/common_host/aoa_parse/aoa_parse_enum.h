@@ -41,6 +41,12 @@ typedef enum {
   POSITION_REPORT
 } aoa_report_mode_t;
 
+/// Enum for angle calculate mode
+typedef enum {
+  RTL = 0,
+  MUSIC
+} aoa_angle_mode_t;
+
 /**
  * Convert string to locator reporting mode.
  *
@@ -64,6 +70,18 @@ sl_status_t aoa_parse_report_mode_from_string(char *str, aoa_report_mode_t *repo
  * @retval SL_STATUS_INVALID_PARAMETER The input was invalid.
  */
 sl_status_t aoa_parse_report_mode_to_string(aoa_report_mode_t report_mode, char **str);
+
+/**
+ * Convert angle calculating mode to string.
+ *
+ * @param[in] angle_mode Locator angle calculating mode.
+ * @param[out] str Output string.
+ * @return Status ot the conversion.
+ * @retval SL_STATUS_OK The conversion was successful.
+ * @retval SL_STATUS_NULL_POINTER Invalid null pointer received as argument.
+ * @retval SL_STATUS_INVALID_PARAMETER The input was invalid.
+ */
+sl_status_t aoa_parse_angle_mode_from_string(char *str, aoa_angle_mode_t *angle_mode);
 
 /**
  * Convert string to AoX estimator mode.

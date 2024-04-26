@@ -90,6 +90,43 @@ sl_status_t aoa_parse_report_mode_to_string(aoa_report_mode_t report_mode, char 
 }
 
 // -----------------------------------------------------------------------------
+// Angle mode
+
+static const char *angle_mode_str[] = {
+  "RTL",              // Default
+  "RTL_LIB",          // Alias 1
+  "SILABS",           // Alias 2
+  "MUSIC",            // Default
+  "CUSTOM",           // Alias 1
+  "MARINERO"          // Alias 2
+};
+
+static const aoa_angle_mode_t angle_mode_enum[] = {
+  RTL,
+  RTL,
+  RTL,
+  MUSIC,
+  MUSIC,
+  MUSIC
+};
+
+#define ANGLE_MODE_COUNT    (sizeof(angle_mode_str) / sizeof(angle_mode_str[0]))
+
+sl_status_t aoa_parse_angle_mode_from_string(char *str, aoa_angle_mode_t *angle_mode)
+{
+  if ((str == NULL) || (angle_mode == NULL)) {
+    return SL_STATUS_NULL_POINTER;
+  }
+  for (size_t i = 0; i < ANGLE_MODE_COUNT; i++) {
+    if (strcasecmp(str, angle_mode_str[i]) == 0) {
+      *angle_mode = angle_mode_enum[i];
+      return SL_STATUS_OK;
+    }
+  }
+  return SL_STATUS_INVALID_PARAMETER;
+}
+
+// -----------------------------------------------------------------------------
 // AoX mode
 
 #define AOX_MODE_LIST                            \

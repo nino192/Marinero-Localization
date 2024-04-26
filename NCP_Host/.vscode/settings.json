@@ -27,6 +27,9 @@
         "aoa_parse.h": "c",
         "marinero_positioning.h": "c",
         "unistd.h": "c",
-        "aoa_parse_enum.h": "c"
+        "aoa_parse_enum.h": "c",
+        "abr_initiator_interface.h": "c",
+        "sl_rtl_clib_api.h": "c",
+        "app_assert.h": "c"
     }
 }

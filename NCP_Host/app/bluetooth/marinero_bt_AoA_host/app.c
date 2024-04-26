@@ -78,6 +78,7 @@
   "    -h  Print this help message.\n"
 
 #define DEFAULT_REPORT_MODE           POSITION_REPORT
+#define DEFAULT_ANGLE_MODE            RTL_LIB
 
 static sl_status_t get_board_type(antenna_array_board_t *board_type);
 static void parse_config_file(const char *file_name);
@@ -94,6 +95,9 @@ static sl_status_t check_config_topic(const char* topic);
 
 // report mode config
 static aoa_report_mode_t report_mode;
+
+//angle calculation mode config
+static aoa_angle_mode_t angle_mode;
 
 // Locator ID
 static aoa_id_t locator_id;
@@ -119,6 +123,7 @@ void app_init(int argc, char *argv[])
   char *cte_mode_string;
 
   report_mode = DEFAULT_REPORT_MODE;
+  angle_mode = DEFAULT_ANGLE_MODE;
 
   // Process command line options.
   while ((opt = getopt(argc, argv, OPTSTRING)) != -1) {
@@ -254,7 +259,7 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
       sc = aoa_angle_add_config(locator_id, &angle_config);
       app_assert_status(sc);
 
-      if (report_mode == ANGLE_REPORT) {
+      if (report_mode == ANGLE_REPORT || report_mode == POSITION_REPORT) {
         // Use random antenna switch pattern in angle reporting mode.
         sc = antenna_array_shuffle_pattern(&angle_config->antenna_array, rand);
         app_assert_status(sc);
@@ -409,8 +414,10 @@ void aoa_cte_on_iq_report(aoa_db_entry_t *tag, aoa_iq_report_t *iq_report)
 
       ec = marinero_position((aoa_state_t *)tag->user_data,
                         iq_report,
+                        &angle,
                         &position,
-                        locator_id);
+                        locator_id,
+                        angle_mode);
 
       if (ec == SL_RTL_ERROR_ESTIMATION_IN_PROGRESS) {
         // No valid positions are available yet.
@@ -438,7 +445,7 @@ void aoa_cte_on_iq_report(aoa_db_entry_t *tag, aoa_iq_report_t *iq_report)
   app_assert(NULL != topic, "Failed to allocate memory for the MQTT topic.");
   aoa_address_to_id(tag->address.addr, tag->address_type, tag_id);
   snprintf(topic, size, topic_template, locator_id, tag_id);
-  app_log("azimuth: %f elevation: %f" APP_LOG_NL, angle.azimuth,angle.elevation);
+  app_log("azimuth: %f elevation: %f distance: %f" APP_LOG_NL, angle.azimuth,angle.elevation,angle.distance);
 
   // Send message
   sc = mqtt_publish(&mqtt_handle, topic, payload, false);
@@ -553,6 +560,18 @@ static void parse_config(const char *config)
     antenna_array_reinit = true;
   }
 
+  // Parse angle_mode
+  sc = aoa_parse_string_config(&str_config, "angleMode", locator_id);
+  if (sc == SL_STATUS_OK) {
+    sc = aoa_parse_angle_mode_from_string(str_config, &angle_mode);
+    if (sc == SL_STATUS_OK) {
+      app_log_info("Angle mode set to: %s" APP_LOG_NL, str_config);
+    } else {
+      app_log_error("Failed to set angle mode to %s" APP_LOG_NL, str_config);
+    }
+  }
+
+
   // Store the previously set antenna array type before parsing.
   antenna_array_type = angle_config->antenna_array.array_type;
   sc = aoa_parse_string_config(&str_config, "antennaMode", locator_id);
@@ -592,7 +611,7 @@ static void parse_config(const char *config)
     } else {
       app_log_debug("antenna_array_init successful." APP_LOG_NL);
       // Use random antenna switch pattern in angle reporting mode.
-      if (report_mode == ANGLE_REPORT) {
+      if (report_mode == ANGLE_REPORT || report_mode == POSITION_REPORT) {
         sc = antenna_array_shuffle_pattern(&angle_config->antenna_array, rand);
         if (sc != SL_STATUS_OK) {
           app_log_status_error_f(sc,

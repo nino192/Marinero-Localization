@@ -28,7 +28,8 @@
    "cteSamplingInterval":3,
    "cteLength":20,
    "slotDuration":1,
-   "reportMode":"ANGLE",
+   "reportMode":"POSITION",
+   "angleMode":"RTL",
    "allowList":[
    ],
    "azimuthMask":[

@@ -18,6 +18,9 @@ extern "C" {
 #include "aoa_util.h"
 #include "antenna_array.h"
 #include "aoa_angle.h"
+#include "aoa_parse_enum.h"
+#include "marinero_angle.h"
+
 
 /***************************************************************************//**
  * Calculate position from angle and distance
@@ -30,8 +33,10 @@ extern "C" {
  ******************************************************************************/
 enum sl_rtl_error_code marinero_position(aoa_state_t *aoa_state,
                                          aoa_iq_report_t *iq_report,
+                                         aoa_angle_t *angle,
                                          aoa_position_t *position,
-                                         aoa_id_t config_id);
+                                         aoa_id_t config_id,
+                                         aoa_angle_mode_t angle_mode);
 //
 //
 //
