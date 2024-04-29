@@ -78,7 +78,7 @@
   "    -h  Print this help message.\n"
 
 #define DEFAULT_REPORT_MODE           POSITION_REPORT
-#define DEFAULT_ANGLE_MODE            RTL_LIB
+#define DEFAULT_ANGLE_MODE            RTL
 
 static sl_status_t get_board_type(antenna_array_board_t *board_type);
 static void parse_config_file(const char *file_name);
@@ -446,6 +446,7 @@ void aoa_cte_on_iq_report(aoa_db_entry_t *tag, aoa_iq_report_t *iq_report)
   aoa_address_to_id(tag->address.addr, tag->address_type, tag_id);
   snprintf(topic, size, topic_template, locator_id, tag_id);
   app_log("azimuth: %f elevation: %f distance: %f" APP_LOG_NL, angle.azimuth,angle.elevation,angle.distance);
+  app_log("x: %f y: %f z: %f" APP_LOG_NL, position.x,position.y,position.z);
 
   // Send message
   sc = mqtt_publish(&mqtt_handle, topic, payload, false);

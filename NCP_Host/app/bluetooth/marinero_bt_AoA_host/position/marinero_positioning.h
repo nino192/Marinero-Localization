@@ -42,7 +42,6 @@ enum sl_rtl_error_code marinero_position(aoa_state_t *aoa_state,
 //
 //
 //
-//
 #ifdef __cplusplus
 };
 #endif
