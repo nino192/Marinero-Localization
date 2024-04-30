@@ -2,6 +2,10 @@
  * @file
  * @brief Single locator positioning calculation, combining AoA + RSSI or AoA + ABR
  *******************************************************************************/
+#ifndef M_PI
+    #define M_PI 3.14159265358979323846
+#endif
+
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
@@ -92,10 +96,10 @@ enum sl_rtl_error_code marinero_position_calculate(aoa_state_t *aoa_state,
   n_pos++;
 
   //position calculate
-  d_crt = angle->distance*sin(angle->elevation);
-  x = d_crt*cos(angle->azimuth);
-  y = d_crt*sin(angle->azimuth);
-  z = angle->distance*sin(angle->elevation);
+  d_crt = (angle->distance)*sin((angle->elevation)* M_PI / 180.0);
+  x = d_crt*cos((angle->azimuth)* M_PI / 180.0);
+  y = d_crt*sin((angle->azimuth)* M_PI / 180.0);
+  z = (angle->distance)*sin((angle->elevation)* M_PI / 180.0);
   
   //standard deviation calculate, first 10 data points rejected
   sum_x += x;
