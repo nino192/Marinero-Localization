@@ -41,7 +41,7 @@
             "program": "${workspaceFolder}/app/bluetooth/marinero_bt_AoA_host/exe/marinero_bt_AoA_host",
             "args": [
                 "-u",
-                "/dev/ttyACM0",
+                "/dev/ttyACM1",
                 "-c",
                 "${workspaceFolder}/app/bluetooth/marinero_bt_AoA_host/config/marinero_locator_config.json"
             ],
