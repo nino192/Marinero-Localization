@@ -63,6 +63,18 @@
                 }
             ],
             "preLaunchTask": "make debug marinero"
+        },
+        {
+            "name": "(gdb) Debug graph.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/app/bluetooth/marinero_bt_AoA_host/graph.py",
+            "args": [
+                "-o",
+                "100"
+            ],
+            "stopOnEntry": true,
+            "cwd": "${fileDirname}",
         }
     ]
 }

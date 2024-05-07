@@ -24,7 +24,7 @@ class Visualizer(object):
         self.tags = {}
         self.counter = 0
 
-    def parse_config(self, config_file):
+    def parse_config(self, config_file, iterations):
         with open (config_file, 'r') as conf:
             conf = json.load(conf)
             if conf['reportMode'] in ['POSITION', 'POSITION_REPORT', 'POSITIONREPORT']:
@@ -34,18 +34,31 @@ class Visualizer(object):
             else:
                 self.report_mode = 'IQ'                        
         self.locator_id = 'ble-pd-0C4314F46B72'       #hardcoded
+        self.iterations = iterations
 
     def plot_position(self, data_list, folder=None, filename=None):
         fig = plt.figure()
         ax = fig.add_subplot(projection='3d')
         for tag in self.tags.values():
-            color = [random.random() for _ in range(3)]
-            for data in data_list:
-                if tag == data['tag_id']:
-                    xs = data.get('x')
-                    ys = data.get('y')
-                    zs = data.get('z')
-                    ax.scatter(xs, ys, zs, color=color)
+            clr = [random.random() for _ in range(3)]
+            c = 0
+            i = 0
+            if self.iterations != None:
+                while c < self.iterations:
+                    if tag == data_list[i]['tag_id']:
+                        xs = data_list[i].get('x')
+                        ys = data_list[i].get('y')
+                        zs = data_list[i].get('z')
+                        ax.scatter(xs, ys, zs, color=clr)
+                        c += 1
+                    i += 1
+            else:
+                for data in data_list:
+                    if tag == data['tag_id']:
+                        xs = data.get('x')
+                        ys = data.get('y')
+                        zs = data.get('z')
+                        ax.scatter(xs, ys, zs, color=clr)
         #draw locator for reference
         p = patches.Rectangle((0, 0), 1, 1, edgecolor='k', facecolor='k')
         ax.add_patch(p)
@@ -138,10 +151,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("-c", metavar="CONFIG_FILE", help="Configuration file path", default=DEFAULT_CONFIG)
     parser.add_argument("-m", metavar="HOST[:PORT]", help="MQTT broker connection parameters", default=DEFAULT_CONNECTION, type=mqtt_conn_type)
+    parser.add_argument("-o", metavar="ITERATIONS", help="Number of data points to plot", type=int)
     args = parser.parse_args()
 
     v = Visualizer()
-    v.parse_config(args.c)
+    v.parse_config(args.c, args.o)
 
     mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2,userdata=v)
     mqttc.on_connect = on_connect
@@ -150,10 +164,19 @@ def main():
 
     mqttc.connect(host=args.m["host"], port=args.m["port"])
 
-    try:
-        mqttc.loop_forever()
-    except KeyboardInterrupt:
-        mqttc.disconnect()
+    while True:
+        try:
+            mqttc.loop_forever()
+        except KeyboardInterrupt:
+            try:
+                mqttc.disconnect()
+                break
+            except IndexError:
+                print('Not enough data points, resetting..')
+                plt.close()
+                mqttc.connect(host=args.m["host"], port=args.m["port"])
+
+
 
 if __name__ == "__main__":
     main()
