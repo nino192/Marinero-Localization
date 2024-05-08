@@ -2,11 +2,12 @@
 #include <functional>
 #include <memory>
 #include <string>
-#include <sstream>
+#include <typeinfo>
 
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
 #include "geometry_msgs/msg/pose_stamped.hpp"
+#include "rapidjson/document.h"
 
 using namespace std::chrono_literals;
 
@@ -15,17 +16,11 @@ class MqttParse : public rclcpp::Node
   public:
     MqttParse() : Node("mqtt_parser")
     {
-        publisher_ = this->create_publisher<geometry_msgs::msg::PoseStamped>("/position", 10);
-        subscriber_ = this->create_subscription<std_msgs::msg::String>("topic", 10, std::bind(&MqttParse::subscriptionCallback, this, std::placeholders::_1));
+        publisher_ = this->create_publisher<geometry_msgs::msg::PoseStamped>("/ros/position/ble_pd_804B5056BAA0", 10);
+        subscriber_ = this->create_subscription<std_msgs::msg::String>("/position/ble_pd_804B5056BAA0", 10, std::bind(&MqttParse::subscriptionCallback, this, std::placeholders::_1));
     }
 
   private:
-    void publish_position()
-    {
-        auto pose_msg = geometry_msgs::msg::PoseStamped();
-        pose_msg.pose.position.x = 1.0;
-        publisher_->publish(pose_msg);
-    }
     void subscriptionCallback(const std_msgs::msg::String::SharedPtr msg)
     {
         auto pose_msg = geometry_msgs::msg::PoseStamped();
@@ -41,20 +36,23 @@ class MqttParse : public rclcpp::Node
     }
     bool parseStringToPose(const std::string &str, geometry_msgs::msg::PoseStamped &pose)
     {
-        std::istringstream iss(str);
-        double x, y, z;
-        if (!(iss >> x >> y >> z))
-        {
-            return false; // Parsing failed
+        rapidjson::Document document;
+        document.Parse(str.c_str());
+
+        if (document.HasParseError()){
+            RCLCPP_ERROR(this->get_logger(), "Failed to parse JSON");
+            return false;
         }
-        //
-        //nadodat parsing logiku tu
-        //
-        pose.pose.position.x = x;
-        pose.pose.position.y = y;
-        pose.pose.position.z = z;
+
+        if (!document.HasMember("x") || !document.HasMember("y") || !document.HasMember("z")) {
+            RCLCPP_ERROR(this->get_logger(), "Missing required fields in JSON");
+            return false;
+        }
+        pose.pose.position.x = document["x"].GetDouble();
+        pose.pose.position.y = document["y"].GetDouble();
+        pose.pose.position.z = document["z"].GetDouble();
         pose.header.stamp = this->now();
-        pose.header.frame_id = "locator_frame";
+        pose.header.frame_id = "locator_link";
         return true;
     }
 

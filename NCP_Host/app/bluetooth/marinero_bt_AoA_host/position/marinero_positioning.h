@@ -37,11 +37,13 @@ enum sl_rtl_error_code marinero_position(aoa_state_t *aoa_state,
                                          aoa_position_t *position,
                                          aoa_id_t config_id,
                                          aoa_angle_mode_t angle_mode);
-//
-//
-//
-//
-//
+
+//position calculate definition
+enum sl_rtl_error_code marinero_position_calculate(aoa_state_t *aoa_state,
+                                                   aoa_angle_t *angle,
+                                                   aoa_position_t *position,
+                                                   aoa_id_t config_id);
+                                                   
 #ifdef __cplusplus
 };
 #endif

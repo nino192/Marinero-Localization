@@ -6,8 +6,11 @@ mqtt_client:
     bridge:
       mqtt2ros:
         mqtt_topics: 
-          - silabs/aoa/angle/ble-pd-0C4314F46B72/ble-pd-804B5056BAA0
-        silabs/aoa/angle/ble-pd-0C4314F46B72/ble-pd-804B5056BAA0:
-          ros_topic: /angle/ros
+          - silabs/aoa/position/ble-pd-0C4314F46B72/ble-pd-804B5056BAA0
+        silabs/aoa/position/ble-pd-0C4314F46B72/ble-pd-804B5056BAA0:
+          ros_topic: /position/ble_pd_804B5056BAA0
+          primitive: true
+        silabs/aoa/position/ble-pd-0C4314F46B72/ble-pd-804B50549A83:
+          ros_topic: /position/ble_pd_804B50549A83
           primitive: true
           

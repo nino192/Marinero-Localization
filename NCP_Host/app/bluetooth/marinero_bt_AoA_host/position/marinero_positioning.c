@@ -17,13 +17,6 @@
 #include "app_log.h"
 #include "app_assert.h"
 
-//position calculate definition
-enum sl_rtl_error_code marinero_position_calculate(aoa_state_t *aoa_state,
-                                                   aoa_angle_t *angle,
-                                                   aoa_position_t *position,
-                                                   aoa_id_t config_id);
-
-
 enum sl_rtl_error_code marinero_position(aoa_state_t *aoa_state,
                                          aoa_iq_report_t *iq_report,
                                          aoa_angle_t *angle,
