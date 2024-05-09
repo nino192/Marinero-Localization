@@ -199,6 +199,8 @@ sl_status_t aoa_serialize_position(aoa_position_t *position, char **str)
   CHECK_NULL_RETURN(obj, SL_STATUS_FAIL);
   obj = cJSON_AddNumberToObject(root, "z_stdev", position->z_stdev);
   CHECK_NULL_RETURN(obj, SL_STATUS_FAIL);
+  obj = cJSON_AddNumberToObject(root, "compound_angle", position->compound);
+  CHECK_NULL_RETURN(obj, SL_STATUS_FAIL);
   obj = cJSON_AddNumberToObject(root, "sequence", (int)position->sequence);
   CHECK_NULL_RETURN(obj, SL_STATUS_FAIL);
   *str = cJSON_Print(root);
