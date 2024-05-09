@@ -16,8 +16,8 @@ class MqttParse : public rclcpp::Node
   public:
     MqttParse() : Node("mqtt_parser")
     {
-        publisher_ = this->create_publisher<geometry_msgs::msg::PoseStamped>("/ros/position/ble_pd_804B5056BAA0", 10);
-        subscriber_ = this->create_subscription<std_msgs::msg::String>("/position/ble_pd_804B5056BAA0", 10, std::bind(&MqttParse::subscriptionCallback, this, std::placeholders::_1));
+        publisher_ = this->create_publisher<geometry_msgs::msg::PoseStamped>("/ros/position/tag", 10);
+        subscriber_ = this->create_subscription<std_msgs::msg::String>("/position/tag", 10, std::bind(&MqttParse::subscriptionCallback, this, std::placeholders::_1));
     }
 
   private:

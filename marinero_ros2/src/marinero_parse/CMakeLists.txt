@@ -23,6 +23,13 @@ ament_target_dependencies(mqtt_parse rclcpp std_msgs geometry_msgs)
 
 install(TARGETS
   mqtt_parse
-  DESTINATION lib/${PROJECT_NAME})
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+install(DIRECTORY
+  launch
+  config
+  DESTINATION share/${PROJECT_NAME}
+)
 
 ament_package()
