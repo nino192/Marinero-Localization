@@ -23,8 +23,8 @@ def generate_launch_description():
                 namespace=node_config['namespace'],
                 output='screen',
                 remappings=[
-                    ('/position/tag', '/' + node_config['remappings']['input_topic']),
-                    ('/ros/position/tag', '/' + node_config['remappings']['output_topic'])
+                    ('input_topic', '/' + node_config['remappings']['input_topic']),
+                    ('output_topic', '/' + node_config['remappings']['output_topic'])
                 ]
             )
         )

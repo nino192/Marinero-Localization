@@ -80,6 +80,7 @@ enum sl_rtl_error_code marinero_position_calculate(aoa_state_t *aoa_state,
   float y;
   float z;
   float d_crt;
+  float compound;
   static float sum_x, stdev_x;
   static float sum_y, stdev_y;
   static float sum_z, stdev_z;
@@ -104,10 +105,14 @@ enum sl_rtl_error_code marinero_position_calculate(aoa_state_t *aoa_state,
   sum_z += z;
   mean_z = sum_z/(n_pos);
 
+  //compound angle calculate
+  compound = acos(sin(((angle->azimuth) + 180)* M_PI / 180.0) * cos((angle->elevation) * M_PI / 180.0)) * (180.0 / M_PI);
+
   //assign values
   position->x = x;
   position->y = y;
   position->z = z;
+  position->compound = compound;
 
   if (n_pos > 10){
     stdev_x = sqrt((pow((x - mean_x),2))/ (n_pos-1));

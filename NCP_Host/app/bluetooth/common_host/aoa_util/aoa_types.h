@@ -62,6 +62,7 @@ typedef struct aoa_position_s {
   float y_stdev;
   float z;
   float z_stdev;
+  float compound;
   int32_t sequence;
 } aoa_position_t;
 

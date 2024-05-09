@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(marinero_parse)
+project(marinero_detect)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -12,18 +12,17 @@ find_package(std_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 
 include_directories(
-  include
   ${rclcpp_INCLUDE_DIRS}
   ${std_msgs_INCLUDE_DIRS}
   ${geometry_msgs_INCLUDE_DIRS}
   ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-add_executable(mqtt_parse src/mqtt_parse.cpp)
-ament_target_dependencies(mqtt_parse rclcpp std_msgs geometry_msgs)
+add_executable(detect_closest src/detect_closest.cpp)
+ament_target_dependencies(detect_closest rclcpp std_msgs geometry_msgs)
 
 install(TARGETS
-  mqtt_parse
+  detect_closest
   DESTINATION lib/${PROJECT_NAME}
 )
 
