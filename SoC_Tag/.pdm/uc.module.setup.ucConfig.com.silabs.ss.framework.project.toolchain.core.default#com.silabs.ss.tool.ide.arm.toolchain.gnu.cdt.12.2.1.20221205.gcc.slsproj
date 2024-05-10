@@ -8,6 +8,7 @@
       <file name="gatt_service_cte_adv.xml" generated="true" linked="false"/>
     </folder>
     <file name="sl_memory_config.h" generated="true" linked="false"/>
+    <file name="sl_gatt_service_cte_silabs_config.h" generated="true" linked="false"/>
     <file name="sl_gatt_service_cte_config.h" generated="true" linked="false"/>
     <file name="nvm3_default_config.h" generated="true" linked="false"/>
     <file name="psa_crypto_config.h" generated="true" linked="false"/>
@@ -16,14 +17,12 @@
     <file name="sl_bluetooth_config.h" generated="true" linked="false"/>
     <file name="sl_board_control_config.h" generated="true" linked="false"/>
     <file name="sl_bluetooth_connection_config.h" generated="true" linked="false"/>
-    <file name="sl_gatt_service_cte_connectionless_config.h" generated="true" linked="false"/>
     <file name="app_assert_config.h" generated="true" linked="false"/>
     <file name="sl_sleeptimer_config.h" generated="true" linked="false"/>
     <file name="sl_power_manager_config.h" generated="true" linked="false"/>
     <file name="sl_bt_in_place_ota_dfu_config.h" generated="true" linked="false"/>
     <file name="sl_device_init_lfxo_config.h" generated="true" linked="false"/>
     <file name="sl_rail_util_pti_config.h" generated="true" linked="false"/>
-    <file name="sl_bt_periodic_advertiser_config.h" generated="true" linked="false"/>
     <file name="app_properties_config.h" generated="true" linked="false"/>
     <file name="sl_bluetooth_advertiser_config.h" generated="true" linked="false"/>
     <file name="sl_device_init_emu_config.h" generated="true" linked="false"/>

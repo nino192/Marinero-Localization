@@ -24,9 +24,23 @@ def generate_launch_description():
                 output='screen',
                 remappings=[
                     ('input_topic', '/' + node_config['remappings']['input_topic']),
-                    ('output_topic', '/' + node_config['remappings']['output_topic'])
+                    ('output_topic_position', '/' + node_config['remappings']['output_topic_position']),
+                    ('output_topic_angle', '/' + node_config['remappings']['output_topic_angle'])
                 ]
             )
         )
+    nodes.append(            
+        Node(
+            package='marinero_detect',
+            executable='detect_closest',
+            name='detect_closest_tag',
+            output='screen',
+            remappings=[
+                    ('input_topic', '/' + node_config['remappings']['input_topic']),
+                    ('output_topic_position', '/' + node_config['remappings']['output_topic_position']),
+                    ('output_topic_angle', '/' + node_config['remappings']['output_topic_angle'])
+                ]
+        )
+    )
     
     return LaunchDescription(nodes)

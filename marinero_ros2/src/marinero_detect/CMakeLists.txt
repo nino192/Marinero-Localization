@@ -9,17 +9,15 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
-find_package(geometry_msgs REQUIRED)
 
 include_directories(
   ${rclcpp_INCLUDE_DIRS}
   ${std_msgs_INCLUDE_DIRS}
-  ${geometry_msgs_INCLUDE_DIRS}
   ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
 add_executable(detect_closest src/detect_closest.cpp)
-ament_target_dependencies(detect_closest rclcpp std_msgs geometry_msgs)
+ament_target_dependencies(detect_closest rclcpp std_msgs)
 
 install(TARGETS
   detect_closest

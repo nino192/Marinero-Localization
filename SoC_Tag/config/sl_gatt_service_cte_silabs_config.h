@@ -1,9 +1,9 @@
 /***************************************************************************//**
  * @file
- * @brief Constant Tone Extension GATT Service (Connectionless) configuration
+ * @brief Constant Tone Extension GATT Service (Silabs proprietary) configuration
  *******************************************************************************
  * # License
- * <b>Copyright 2022 Silicon Laboratories Inc. www.silabs.com</b>
+ * <b>Copyright 2021 Silicon Laboratories Inc. www.silabs.com</b>
  *******************************************************************************
  *
  * SPDX-License-Identifier: Zlib
@@ -28,38 +28,38 @@
  *
  ******************************************************************************/
 
-#ifndef SL_GATT_SERVICE_CTE_CONNECTIONLESS_CONFIG_H
-#define SL_GATT_SERVICE_CTE_CONNECTIONLESS_CONFIG_H
+#ifndef SL_GATT_SERVICE_CTE_SILABS_CONFIG_H
+#define SL_GATT_SERVICE_CTE_SILABS_CONFIG_H
 
 /***********************************************************************************************//**
- * @addtogroup gatt_service_cte_connectionless
+ * @addtogroup gatt_service_cte_silabs
  * @{
  **************************************************************************************************/
 
 // <<< Use Configuration Wizard in Context Menu >>>
 
-// <o SL_GATT_SERVICE_CTE_CONNECTIONLESS_ADV_INTERVAL> Connectionless CTE advertising interval in units of 1.25 ms <6-65535>
-// <i> Default: 16
-// <i> Ranges from 7.5 ms to 81.92 s.
-#define SL_GATT_SERVICE_CTE_CONNECTIONLESS_ADV_INTERVAL   16
+// <o SL_GATT_SERVICE_CTE_SILABS_ADV_INTERVAL> Silabs CTE advertising interval in units of 0.625 ms <32-65535>
+// <i> Default: 32
+// <i> Ranges from 20 ms to 40.96 s.
+#define SL_GATT_SERVICE_CTE_SILABS_ADV_INTERVAL   32
 
-// <o SL_GATT_SERVICE_CTE_CONNECTIONLESS_MIN_LEN> Advertising Constant Tone Extension Minimum Length in units of 8 us <2-20>
+// <o SL_GATT_SERVICE_CTE_SILABS_MIN_LEN> Advertising Constant Tone Extension Minimum Length in units of 8 us <2-20>
 // <i> Default: 20
 // <i> Ranges from 16 us to 160 us.
-#define SL_GATT_SERVICE_CTE_CONNECTIONLESS_MIN_LEN   20
+#define SL_GATT_SERVICE_CTE_SILABS_MIN_LEN        20
 
-// <o SL_GATT_SERVICE_CTE_CONNECTIONLESS_MIN_TX_COUNT> Advertising Constant Tone Extension Minimum Transmit Count characteristic. <1-15>
+// <o SL_GATT_SERVICE_CTE_SILABS_MIN_TX_COUNT> Advertising Constant Tone Extension Minimum Transmit Count characteristic. <1-15>
 // <i> Default: 1
 // <i> Ranges from 1 to 15.
-#define SL_GATT_SERVICE_CTE_CONNECTIONLESS_MIN_TX_COUNT   1
+#define SL_GATT_SERVICE_CTE_SILABS_MIN_TX_COUNT    1
 
-// <o SL_GATT_SERVICE_CTE_CONNECTIONLESS_ADV_CTE_PHY> Advertising Constant Tone Extension PHY characteristic.
+// <o SL_GATT_SERVICE_CTE_SILABS_ADV_CTE_PHY> Advertising Constant Tone Extension PHY characteristic.
 // <0=> 1M PHY CTE
 // <1=> 2M PHY CTE
 // <i> Default: 0
-#define SL_GATT_SERVICE_CTE_CONNECTIONLESS_ADV_CTE_PHY  0
+#define SL_GATT_SERVICE_CTE_SILABS_ADV_CTE_PHY  0
 
 // <<< end of configuration section >>>
 
-/** @} (end addtogroup gatt_service_cte_connectionless) */
-#endif // SL_GATT_SERVICE_CTE_CONNECTIONLESS_CONFIG_H
+/** @} (end addtogroup gatt_service_cte_silabs) */
+#endif // SL_GATT_SERVICE_CTE_SILABS_CONFIG_H

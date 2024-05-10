@@ -22,40 +22,22 @@
    ],
    "angleFiltering":true,
    "angleFilteringWeight":0.6,
-   "cteMode":"CONN_LESS",
+   "cteMode":"SILABS",
    "cteSamplingInterval":3,
    "cteLength":20,
    "slotDuration":1,
    "reportMode":"POSITION",
    "angleMode":"RTL",
    "allowList":[
+      "ble-pd-804B50549A83",
+      "ble-pd-804B5056BAA0"
    ],
    "azimuthMask":[
-      {
-         "min":0.0,
-         "max":10.0
-      },
-      {
-         "min":20.0,
-         "max":30.0
-      },
-      {
-         "min":40.0,
-         "max":50.0
-      }
    ],
    "elevationMask":[
       {
          "min":0.0,
          "max":10.0
-      },
-      {
-         "min":20.0,
-         "max":30.0
-      },
-      {
-         "min":40.0,
-         "max":50.0
       }
    ]
 }

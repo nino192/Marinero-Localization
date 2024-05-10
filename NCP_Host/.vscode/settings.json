@@ -30,6 +30,12 @@
         "aoa_parse_enum.h": "c",
         "abr_initiator_interface.h": "c",
         "sl_rtl_clib_api.h": "c",
-        "app_assert.h": "c"
+        "app_assert.h": "c",
+        "aoa_util.h": "c",
+        "aoa_cte_config.h": "c",
+        "stdlib.h": "c",
+        "aoa_db.h": "c",
+        "aoa_topics.h": "c",
+        "aoa_parse_cte.h": "c"
     }
 }

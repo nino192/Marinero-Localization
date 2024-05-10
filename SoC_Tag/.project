@@ -605,9 +605,9 @@
 			<locationURI>STUDIO_SDK_LOC/app/bluetooth/common/gatt_service_cte_adv/sl_gatt_service_cte_adv.h</locationURI>
 		</link>
 		<link>
-			<name>gecko_sdk_4.4.1/app/bluetooth/common/gatt_service_cte_adv/sl_gatt_service_cte_connectionless.c</name>
+			<name>gecko_sdk_4.4.1/app/bluetooth/common/gatt_service_cte_adv/sl_gatt_service_cte_silabs.c</name>
 			<type>1</type>
-			<locationURI>STUDIO_SDK_LOC/app/bluetooth/common/gatt_service_cte_adv/sl_gatt_service_cte_connectionless.c</locationURI>
+			<locationURI>STUDIO_SDK_LOC/app/bluetooth/common/gatt_service_cte_adv/sl_gatt_service_cte_silabs.c</locationURI>
 		</link>
 		<link>
 			<name>gecko_sdk_4.4.1/app/bluetooth/common/gatt_service_cte_adv/sli_gatt_service_cte_adv.h</name>

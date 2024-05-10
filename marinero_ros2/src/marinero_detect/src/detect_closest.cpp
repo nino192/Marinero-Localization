@@ -1,61 +1,71 @@
 #include <functional>
-#include <memory>
+#include <vector>
 #include <string>
-#include <typeinfo>
+#include <memory>
 
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
-#include "geometry_msgs/msg/pose_stamped.hpp"
-
-//ovo cu koristst samo ako ne uspijem smaknut detekciju unutar app.c
+#include "std_msgs/msg/float32.hpp"
 
 class DetectClosest : public rclcpp::Node
 {
   public:
     DetectClosest() : Node("detection_node")
     {
-        publisher_ = this->create_publisher<std_msgs::msg::String>(output_topic, 10);
-        subscriber_ = this->create_subscription<geometry_msgs::msg::PoseStamped>(input_topic, 10, std::bind(&DetectClosest::subscriptionCallback, this, std::placeholders::_1));
+        auto topics = this->get_topic_names_and_types();
+
+        for (const auto &topic : topics)
+        {
+            const std::string &topic_name = topic.first;
+
+            size_t pos = topic_name.rfind("/");
+            std::string tag_id = topic_name.substr(pos + 1);
+
+            if (topic_name.find("/ros/angle") == 0)
+            {
+                RCLCPP_INFO(get_logger(), "Subscribing to topic: %s", topic_name.c_str());
+                auto sub = this->create_subscription<std_msgs::msg::Float32>(
+                    topic_name, 1, [this, tag_id](const std_msgs::msg::Float32::SharedPtr msg)
+                    {
+                        callback(msg, tag_id);
+                    });
+                subscriptions_.push_back(sub);
+            }
+        }
+        publisher_ = this->create_publisher<std_msgs::msg::String>("/ros/closest_tag", 10);
     }
 
   private:
-    void subscriptionCallback(const std_msgs::msg::String::SharedPtr msg)
+    void callback(const std_msgs::msg::Float32::SharedPtr msg, const std::string &tag_id)
     {
-        auto pose_msg = geometry_msgs::msg::PoseStamped();
-        if (calculateClosest(msg->data, pose_msg))
+        if (calculateClosest(msg->data, tag_id, this->closest_tag_id))
         {
-            RCLCPP_INFO(this->get_logger(), "Received pose message");
-            publisher_->publish(pose_msg);
+            //RCLCPP_INFO(get_logger(), "Closest tag changed.");
+            publisher_->publish(closest_tag_id);
         }
         else
         {
-            RCLCPP_WARN(this->get_logger(), "Failed to parse string into pose message");
+            ;
+            //RCLCPP_INFO(get_logger(), "Closest tag remained the same.");
         }
     }
-    bool calculateClosest(const std::string &str, geometry_msgs::msg::PoseStamped &pose)
+    bool calculateClosest(const float &data, std::string tag_id, std_msgs::msg::String &tag_msg)
     {
-        rapidjson::Document document;
-        document.Parse(str.c_str());
-
-        if (document.HasParseError()){
-            RCLCPP_ERROR(this->get_logger(), "Failed to parse JSON");
-            return false;
+        if (std::abs(this->closest_tag - 90) > std::abs(data - 90) && tag_msg.data != tag_id)    //ova logika nije dobra, konvergira u 90, popravit !!
+        {
+            RCLCPP_INFO(get_logger(), "%s", tag_id.c_str());
+            this->closest_tag = data;
+            tag_msg.data = tag_id;
+            return true;
         }
-
-        if (!document.HasMember("x") || !document.HasMember("y") || !document.HasMember("z")) {
-            RCLCPP_ERROR(this->get_logger(), "Missing required fields in JSON");
+        else
             return false;
-        }
-        pose.pose.position.x = document["x"].GetDouble();
-        pose.pose.position.y = document["y"].GetDouble();
-        pose.pose.position.z = document["z"].GetDouble();
-        pose.header.stamp = this->now();
-        pose.header.frame_id = "locator_link";
-        return true;
     }
 
     rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
-    rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr subscriber_;
+    std::vector<rclcpp::Subscription<std_msgs::msg::Float32>::SharedPtr> subscriptions_;
+    double closest_tag = 0.0;
+    std_msgs::msg::String closest_tag_id;
 };
 
 int main(int argc, char * argv[])

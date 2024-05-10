@@ -1,5 +1,5 @@
-gecko_sdk_4.4.1/app/bluetooth/common/gatt_service_cte_adv/sl_gatt_service_cte_connectionless.o: \
- /home/nino/SimplicityStudio/SDKs/gecko_sdk/app/bluetooth/common/gatt_service_cte_adv/sl_gatt_service_cte_connectionless.c \
+gecko_sdk_4.4.1/app/bluetooth/common/gatt_service_cte_adv/sl_gatt_service_cte_silabs.o: \
+ /home/nino/SimplicityStudio/SDKs/gecko_sdk/app/bluetooth/common/gatt_service_cte_adv/sl_gatt_service_cte_silabs.c \
  /home/nino/SimplicityStudio/SDKs/gecko_sdk//platform/common/toolchain/inc/sl_gcc_preinclude.h \
  /home/nino/Marinero_DOA_BLE/SoC_Tag/autogen/sl_bluetooth.h \
  /home/nino/SimplicityStudio/SDKs/gecko_sdk//platform/service/power_manager/inc/sl_power_manager.h \
@@ -26,7 +26,7 @@ gecko_sdk_4.4.1/app/bluetooth/common/gatt_service_cte_adv/sl_gatt_service_cte_co
  /home/nino/Marinero_DOA_BLE/SoC_Tag/config/app_assert_config.h \
  /home/nino/Marinero_DOA_BLE/SoC_Tag/config/sl_gatt_service_cte_config.h \
  /home/nino/SimplicityStudio/SDKs/gecko_sdk/app/bluetooth/common/gatt_service_cte_adv/sli_gatt_service_cte_adv.h \
- /home/nino/Marinero_DOA_BLE/SoC_Tag/config/sl_gatt_service_cte_connectionless_config.h
+ /home/nino/Marinero_DOA_BLE/SoC_Tag/config/sl_gatt_service_cte_silabs_config.h
 /home/nino/SimplicityStudio/SDKs/gecko_sdk//platform/common/toolchain/inc/sl_gcc_preinclude.h:
 /home/nino/Marinero_DOA_BLE/SoC_Tag/autogen/sl_bluetooth.h:
 /home/nino/SimplicityStudio/SDKs/gecko_sdk//platform/service/power_manager/inc/sl_power_manager.h:
@@ -53,4 +53,4 @@ gecko_sdk_4.4.1/app/bluetooth/common/gatt_service_cte_adv/sl_gatt_service_cte_co
 /home/nino/Marinero_DOA_BLE/SoC_Tag/config/app_assert_config.h:
 /home/nino/Marinero_DOA_BLE/SoC_Tag/config/sl_gatt_service_cte_config.h:
 /home/nino/SimplicityStudio/SDKs/gecko_sdk/app/bluetooth/common/gatt_service_cte_adv/sli_gatt_service_cte_adv.h:
-/home/nino/Marinero_DOA_BLE/SoC_Tag/config/sl_gatt_service_cte_connectionless_config.h:
+/home/nino/Marinero_DOA_BLE/SoC_Tag/config/sl_gatt_service_cte_silabs_config.h:

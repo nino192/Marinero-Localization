@@ -26,8 +26,7 @@ gecko_sdk_4.4.1/protocol/bluetooth/src/sl_bt_stack_init.o: \
  /home/nino/SimplicityStudio/SDKs/gecko_sdk//protocol/bluetooth/bgstack/ll/inc/sl_btctrl_linklayer.h \
  /home/nino/SimplicityStudio/SDKs/gecko_sdk//protocol/bluetooth/inc/sli_bt_gattdb_def.h \
  /home/nino/SimplicityStudio/SDKs/gecko_sdk//protocol/bluetooth/inc/sli_bt_config_defs.h \
- /home/nino/SimplicityStudio/SDKs/gecko_sdk//protocol/bluetooth/inc/sl_bt_ll_config.h \
- /home/nino/Marinero_DOA_BLE/SoC_Tag/config/sl_bt_periodic_advertiser_config.h
+ /home/nino/SimplicityStudio/SDKs/gecko_sdk//protocol/bluetooth/inc/sl_bt_ll_config.h
 /home/nino/SimplicityStudio/SDKs/gecko_sdk//platform/common/toolchain/inc/sl_gcc_preinclude.h:
 /home/nino/Marinero_DOA_BLE/SoC_Tag/autogen/sl_component_catalog.h:
 /home/nino/SimplicityStudio/SDKs/gecko_sdk//platform/common/inc/sl_status.h:
@@ -55,4 +54,3 @@ gecko_sdk_4.4.1/protocol/bluetooth/src/sl_bt_stack_init.o: \
 /home/nino/SimplicityStudio/SDKs/gecko_sdk//protocol/bluetooth/inc/sli_bt_gattdb_def.h:
 /home/nino/SimplicityStudio/SDKs/gecko_sdk//protocol/bluetooth/inc/sli_bt_config_defs.h:
 /home/nino/SimplicityStudio/SDKs/gecko_sdk//protocol/bluetooth/inc/sl_bt_ll_config.h:
-/home/nino/Marinero_DOA_BLE/SoC_Tag/config/sl_bt_periodic_advertiser_config.h:

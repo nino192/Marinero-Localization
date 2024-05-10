@@ -511,7 +511,7 @@
             <file name="sl_gatt_service_cte_adv.c" uri="studio:/sdk/app/bluetooth/common/gatt_service_cte_adv/sl_gatt_service_cte_adv.c"/>
             <file name="sl_gatt_service_cte_adv.h" uri="studio:/sdk/app/bluetooth/common/gatt_service_cte_adv/sl_gatt_service_cte_adv.h"/>
             <file name="sli_gatt_service_cte_adv.h" uri="studio:/sdk/app/bluetooth/common/gatt_service_cte_adv/sli_gatt_service_cte_adv.h"/>
-            <file name="sl_gatt_service_cte_connectionless.c" uri="studio:/sdk/app/bluetooth/common/gatt_service_cte_adv/sl_gatt_service_cte_connectionless.c"/>
+            <file name="sl_gatt_service_cte_silabs.c" uri="studio:/sdk/app/bluetooth/common/gatt_service_cte_adv/sl_gatt_service_cte_silabs.c"/>
           </folder>
           <folder name="gatt_service_device_information">
             <file name="sl_gatt_service_device_information.h" uri="studio:/sdk/app/bluetooth/common/gatt_service_device_information/sl_gatt_service_device_information.h"/>
