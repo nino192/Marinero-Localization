@@ -68,10 +68,12 @@
             "name": "(gdb) Debug graph.py",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/app/bluetooth/marinero_bt_AoA_host/graph.py",
+            "program": "${workspaceFolder}/app/bluetooth/marinero_bt_AoA_host/graph_angle.py",
             "args": [
                 "-o",
-                "100"
+                "10",
+                "-mul",
+                "2"
             ],
             "stopOnEntry": true,
             "cwd": "${fileDirname}",

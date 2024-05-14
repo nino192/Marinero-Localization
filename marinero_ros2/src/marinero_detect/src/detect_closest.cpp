@@ -38,33 +38,33 @@ class DetectClosest : public rclcpp::Node
   private:
     void callback(const std_msgs::msg::Float32::SharedPtr msg, const std::string &tag_id)
     {
-        if (calculateClosest(msg->data, tag_id, this->closest_tag_id))
-        {
-            //RCLCPP_INFO(get_logger(), "Closest tag changed.");
-            publisher_->publish(closest_tag_id);
-        }
-        else
-        {
-            ;
-            //RCLCPP_INFO(get_logger(), "Closest tag remained the same.");
-        }
+        calculateClosest(msg->data, tag_id, this->closest_tag_id);
+        RCLCPP_INFO(get_logger(), "Publishing tag_id..");
+        publisher_->publish(closest_tag_id);
     }
-    bool calculateClosest(const float &data, std::string tag_id, std_msgs::msg::String &tag_msg)
+    void calculateClosest(const float &data, std::string tag_id, std_msgs::msg::String &tag_msg)
     {
-        if (std::abs(this->closest_tag - 90) > std::abs(data - 90) && tag_msg.data != tag_id)    //ova logika nije dobra, konvergira u 90, popravit !!
+        float difference = std::abs(data - 90);
+
+        if (tag_msg.data == tag_id)
         {
-            RCLCPP_INFO(get_logger(), "%s", tag_id.c_str());
-            this->closest_tag = data;
-            tag_msg.data = tag_id;
-            return true;
+            min_diff = difference;
+            RCLCPP_INFO(get_logger(), "Closest tag remained the same.");
         }
         else
-            return false;
+        {
+            if (difference < min_diff)
+            {
+                tag_msg.data = tag_id;
+                min_diff = difference;
+                RCLCPP_INFO(get_logger(), "Closest tag changed. New closest: %s", tag_id.c_str());
+            }
+        }
     }
 
     rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
     std::vector<rclcpp::Subscription<std_msgs::msg::Float32>::SharedPtr> subscriptions_;
-    double closest_tag = 0.0;
+    double min_diff = 1000.0;
     std_msgs::msg::String closest_tag_id;
 };
 
