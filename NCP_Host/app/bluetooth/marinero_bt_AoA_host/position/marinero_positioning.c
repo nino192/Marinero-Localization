@@ -79,8 +79,8 @@ enum sl_rtl_error_code marinero_position_calculate(aoa_state_t *aoa_state,
   float x;
   float y;
   float z;
-  float d_crt;
   float compound;
+  float phi, theta, rho;
   static float sum_x, stdev_x;
   static float sum_y, stdev_y;
   static float sum_z, stdev_z;
@@ -89,11 +89,15 @@ enum sl_rtl_error_code marinero_position_calculate(aoa_state_t *aoa_state,
 
   n_pos++;
 
+  //spherical coordinates
+  phi = 90 - (angle->elevation);
+  theta = 180 + (angle->azimuth);
+  rho = (angle->distance);
+
   //position calculate
-  d_crt = (angle->distance)*sin((angle->elevation)* M_PI / 180.0);
-  x = d_crt*cos((angle->azimuth)* M_PI / 180.0);
-  y = d_crt*sin((angle->azimuth)* M_PI / 180.0);
-  z = (angle->distance)*sin((angle->elevation)* M_PI / 180.0);
+  x = rho*sin(phi * M_PI / 180.0) * cos(theta * M_PI / 180.0);
+  y = rho*sin(phi * M_PI / 180.0) * sin(theta * M_PI / 180.0);
+  z = rho*cos(phi * M_PI / 180.0);
   
   //standard deviation calculate, first 10 data points rejected
   sum_x += x;
@@ -106,7 +110,7 @@ enum sl_rtl_error_code marinero_position_calculate(aoa_state_t *aoa_state,
   mean_z = sum_z/(n_pos);
 
   //compound angle calculate
-  compound = acos(sin(((angle->azimuth) + 180)* M_PI / 180.0) * cos((angle->elevation) * M_PI / 180.0)) * (180.0 / M_PI);
+  compound = acos(sin(theta * M_PI / 180.0) * sin(phi * M_PI / 180.0)) * (180.0 / M_PI);
 
   //assign values
   position->x = x;

@@ -1,20 +1,39 @@
 #!/usr/bin/python3
 
-#graph angle test results - REQUIREMENT: marinero_locator_config.json reportMode = POSITION
+#graph angle test result plotter - REQUIREMENT: marinero_locator_config.json reportMode = POSITION
 
 import argparse
 import os
 import re
 import json
-import random
+import sys
 
 import paho.mqtt.client as mqtt
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import mpl_toolkits.mplot3d.art3d as art3d
+import numpy as np
+
+from pynput.keyboard import Listener, KeyCode
 
 DEFAULT_CONFIG = os.path.join(os.path.dirname(__file__), "config/marinero_locator_config.json")
+DEFAULT_REFERENCES = os.path.join(os.path.dirname(__file__), "config/references.json")
 DEFAULT_CONNECTION = {"host": "localhost", "port": 1883}
+
+
+class Keyboard:
+    def __init__(self):
+        pass
+
+    def on_press(self, key):
+        if key == KeyCode.from_char(self.key_to_wait):
+            return False
+    
+    def wait(self, key):
+        self.key_to_wait = key
+        with Listener(on_press=self.on_press) as listener:
+            listener.join()
+
 
 class ConfigError(Exception):
     def __init__(self, message, value):
@@ -22,86 +41,111 @@ class ConfigError(Exception):
         self.value = value
         super().__init__(message)
 
+
 class Visualizer(object):
     def __init__(self):
-        self.pos_list = []
-        self.tags = {}
-        self.counter = 0
+        self.data = {}
 
-    def parse_config(self, config_file, iterations):
+    def parse_config(self, config_file, iterations, num):
         with open (config_file, 'r') as conf:
             conf = json.load(conf)
             if conf['reportMode'] in ['POSITION', 'POSITION_REPORT', 'POSITIONREPORT']:
                 self.report_mode = 'POSITION'
             else:
-                raise ConfigError(f"reportMode must be set to POSITION, not {self.report_mode}", self.report_mode)           
+                raise ConfigError(f"reportMode must be set to POSITION, not {conf['reportMode']}", conf['reportMode'])           
         self.locator_id = 'ble-pd-0C4314F46B72'       #hardcoded
         self.iterations = iterations
+        self.num_tags = num
+
+    def parse_references(self, reference_file):
+        with open (reference_file, 'r') as ref:
+            ref = json.load(ref)
+        self.position_references = ref['position_references']
+        self.colors = ref['colors']
 
     def plot_position(self, data_list, folder=None, filename=None):
         fig = plt.figure()
-        ax = fig.add_subplot(projection='3d')
+        ax1 = fig.add_subplot(1, 2, 1, projection='3d')
+        ax2 = fig.add_subplot(1, 2, 2)
 
         legend_labels = []
         legend_colors = []
-        reference_pos = [[-0.7, -1.8, 2.0],[-0.7, 0.6, 0.8]]
 
-        for tag in self.tags.values():
-            clr = [random.random() for _ in range(3)]
-            c = 0
-            i = 0
-            if self.iterations != None:                  #ako je setirana opcija -o > broj iteracija
-                while c < self.iterations:
-                    if tag == data_list[i]['tag_id']:
-                        xs = data_list[i].get('x')
-                        ys = data_list[i].get('y')
-                        zs = data_list[i].get('z')
-                        ax.scatter(xs, ys, zs, color=clr, label=tag)
-                        c += 1
-                    i += 1
-            else:                                         #ako nije setirana opcija -o
-                for data in data_list:
-                    if tag == data['tag_id']:
-                        xs = data.get('x')
-                        ys = data.get('y')
-                        zs = data.get('z')
-                        ax.scatter(xs, ys, zs, color=clr, label=tag)
-            legend_labels.append(tag)
-            legend_colors.append(clr)
+        #error checking (if num of reference positions is not equal to number of tags specified)
+        if len(self.position_references) != self.num_tags:
+            raise ConfigError(f"Number of references is not equal to -num of tags specified ({self.num_tags}).", self.num_tags)
+
+        for i, tag_list in enumerate(data_list.values()):
+            color = self.colors[i]
+            for j in range(self.iterations):
+                x = tag_list[j].get('x')
+                y = tag_list[j].get('y')
+                z = tag_list[j].get('z')
+                compound = tag_list[j].get('compound_angle')
+                ax1.scatter(x, y, z, color=color)
+
+                #plot compound angle on a different plot
+                compound_radians = np.radians(compound)
+                slope = np.tan(compound_radians)
+                y_values = np.linspace(-2.5, 2.5, 100)
+                z_values = slope * y_values
+                ax2.plot(y_values, z_values, color=color, linewidth=1)
+
+            keys = list(data_list.keys())
+            legend_labels.append(keys[i])
+            legend_colors.append(color)
 
         #draw locator for reference
         p = patches.Rectangle((-0.5, -0.5), 1, 1, edgecolor='k', facecolor='k')
-        ax.add_patch(p)
+        ax1.add_patch(p)
         art3d.pathpatch_2d_to_3d(p, z=0, zdir="z")
+        p = patches.Rectangle((-0.1, 0), 0.2, 0.05, linewidth=1, edgecolor='k', facecolor='k')
+        ax2.add_patch(p)
 
         #draw true position of a tag
-        for reference in reference_pos:
-            ax.scatter(reference[0], reference[1], reference[2], color='r', label='ref')
+        for reference in self.position_references:
+            ax1.scatter(reference[0], reference[1], reference[2], color='r', label='ref')
+            ax2.scatter(reference[1], reference[2], color='r', label='ref')
         legend_labels.append('ref')
         legend_colors.append('r')
-
-        ax.set_xlabel('X Label')
-        ax.set_ylabel('Y Label')
-        ax.set_zlabel('Z Label')
-        ax.set_xlim(-5, 5)
-        ax.set_ylim(-5, 5)
-        ax.set_zlim(0, 5)
 
         custom_legend = [plt.Line2D([0], [0], marker='o', color='w', label=label,
                                      markerfacecolor=color, markersize=10) 
                          for label, color in zip(legend_labels, legend_colors)]
-        ax.legend(handles=custom_legend, loc='upper left', bbox_to_anchor=(1, 1), title='Tags')
+
+        ax1.set_title('Tag positions')
+        ax1.set_xlabel('x (m)')
+        ax1.set_ylabel('y (m)')
+        ax1.set_zlabel('z (m)')
+        ax1.set_xlim(-5, 5)                         #correspond to position reference list
+        ax1.set_ylim(-5, 5)                         #correspond to position reference list
+        ax1.set_zlim(0, 5)                          #correspond to position reference list
+
+        ax2.set_title('Compound angle (top view)')
+        ax2.set_xlabel('y (m)')
+        ax2.set_ylabel('z (m)')
+        ax2.set_xlim(-2.5, 2.5)                     #correspond to position reference list
+        ax2.set_ylim(0, 5)                          #correspond to position reference list
+        ax2.grid(True)
+
+        fig.subplots_adjust(left=0.05, right=0.8)
+        fig.legend(handles=custom_legend, loc='upper left', bbox_to_anchor=(0.8, 0.5), title='Tags')
 
         plt.show()
 
         plt.savefig(os.path.join(os.path.dirname(__file__), "img/plot_pos.png"))
 
+    def condition_met(self):
+        for value in self.data.values():  
+            if len(value) < self.iterations or len(self.data) < self.num_tags:
+                return False
+        return True
 
-    def update_pos(self, entry):
-        self.pos_list.append(entry)
-        if entry['tag_id'] not in self.tags.values():
-            self.tags[f'tag_id_{self.counter}'] = entry['tag_id']
-            self.counter += 1
+    def update_pos(self, tag_id, entry):
+        if tag_id not in self.data:
+            self.data[tag_id] = [entry]
+        else:                                           
+            self.data[tag_id].append(entry)
 
 
 def mqtt_conn_type(arg):
@@ -118,14 +162,20 @@ def mqtt_conn_type(arg):
             raise argparse.ArgumentTypeError("Invalid port number: " + arglist[1]) from val
     return retval
 
+
 def on_message(client, userdata, msg):
     ''' Called when a PUBLISH message is received from the server. '''
     if userdata.report_mode == 'POSITION':
         m = re.match(r"silabs/aoa/position/.+/(?P<tag_id>.+)", msg.topic)
         if m is not None:
+            tag_id = m.group("tag_id")
             entry = json.loads(msg.payload)
-            entry["tag_id"] = m.group("tag_id")
-            userdata.update_pos(entry)
+            userdata.update_pos(tag_id, entry)
+            if userdata.condition_met():
+                userdata.plot_position(userdata.data)
+                client.disconnect()
+                print('Disconnected')
+                sys.exit(0)
     else:
         raise ConfigError(f"reportMode must be set to POSITION, not {userdata.report_mode}", userdata.report_mode)
 
@@ -141,42 +191,31 @@ def on_connect(client, userdata, flags, rc, properties):
         raise ConfigError(f"reportMode must be set to POSITION, not {userdata.report_mode}", userdata.report_mode)
 
 
-def on_disconnect(client, userdata, rc, properties=None, reason=None):
-    if userdata.report_mode == 'POSITION':
-        userdata.plot_position(userdata.pos_list)
-    else:
-        raise ConfigError(f"reportMode must be set to POSITION, not {userdata.report_mode}", userdata.report_mode)
-    print('Disconnected')
-
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("-c", metavar="CONFIG_FILE", help="Configuration file path", default=DEFAULT_CONFIG)
     parser.add_argument("-m", metavar="HOST[:PORT]", help="MQTT broker connection parameters", default=DEFAULT_CONNECTION, type=mqtt_conn_type)
-    parser.add_argument("-o", metavar="ITERATIONS", help="Number of data points to plot", type=int)
+    parser.add_argument("-o", metavar="ITERATIONS", help="Number of data points at a reference", type=int, default=10)
+    parser.add_argument("-num", metavar="NUM_TAGS", help="Number of tags expected", type=int, default=1)
+    parser.add_argument("-ref", metavar="REFERENCES_FILE", help="References file path", default=DEFAULT_REFERENCES)
     args = parser.parse_args()
 
     v = Visualizer()
-    v.parse_config(args.c, args.o)
+    v.parse_config(args.c, args.o, args.num)
+    v.parse_references(args.ref)
+
+    keyboard = Keyboard()
 
     mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2,userdata=v)
     mqttc.on_connect = on_connect
     mqttc.on_message = on_message
-    mqttc.on_disconnect = on_disconnect
 
     mqttc.connect(host=args.m["host"], port=args.m["port"])
 
-    while True:
-        try:
-            mqttc.loop_forever()
-        except KeyboardInterrupt:
-            try:
-                mqttc.disconnect()
-                break
-            except IndexError:
-                print('Not enough data points, resetting..')
-                plt.close()
-                mqttc.connect(host=args.m["host"], port=args.m["port"])
+    print("Press 's' to start test..")
+    keyboard.wait('s')
 
+    mqttc.loop_forever()
 
 
 if __name__ == "__main__":

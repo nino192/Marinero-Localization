@@ -1,0 +1,7 @@
+{
+    "azimuth_references":[-180, -135],
+    "elevation_references":[35, 20],
+    "distance_references":[2, 1],
+    "position_references":[[-0.7, -1.8, 2.0]],
+    "colors": ["g", "b", "c", "y", "m"]
+}
