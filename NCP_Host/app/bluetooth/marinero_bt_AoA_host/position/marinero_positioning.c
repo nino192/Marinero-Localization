@@ -1,10 +1,7 @@
 /***************************************************************************//**
  * @file
- * @brief Single locator positioning calculation, combining AoA + RSSI or AoA + ABR
+ * @brief Single locator positioning calculation, combining AoA + RSSI
  *******************************************************************************/
-#ifndef M_PI
-    #define M_PI 3.14159265358979323846
-#endif
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -12,6 +9,7 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include "marinero_distance.h"
 #include "marinero_positioning.h"
 #include "aoa_angle_config.h"
 #include "app_log.h"
@@ -31,6 +29,8 @@ enum sl_rtl_error_code marinero_position(aoa_state_t *aoa_state,
 
   switch(angle_mode){
     case (RTL):
+      //ec = calculate_avg_RSSI(iq_report);
+
       ec = aoa_calculate(aoa_state,
                         iq_report,
                         angle,

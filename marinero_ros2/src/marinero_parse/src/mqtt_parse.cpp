@@ -33,13 +33,13 @@ class MqttParse : public rclcpp::Node
         auto angle_msg = std_msgs::msg::Float32();
         if (parseStringToPose(msg->data, pose_msg, angle_msg))
         {
-            //RCLCPP_INFO(this->get_logger(), "Received pose message");
+            RCLCPP_INFO(this->get_logger(), "Received pose message");
             publisher1_->publish(pose_msg);
             publisher2_->publish(angle_msg);
         }
         else
         {
-            ;//RCLCPP_WARN(this->get_logger(), "Failed to parse string into pose message");
+            RCLCPP_WARN(this->get_logger(), "Failed to parse string into pose message");
         }
     }
     bool parseStringToPose(const std::string &str, geometry_msgs::msg::PoseStamped &pose, std_msgs::msg::Float32 &angle)

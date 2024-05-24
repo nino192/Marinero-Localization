@@ -1,6 +1,6 @@
 /***************************************************************************//**
  * @file
- * @brief Single locator positioning calculation, combining AoA + RSSI or AoA + ABR
+ * @brief Single locator positioning calculation, combining AoA + RSSI
  *******************************************************************************/
 
 #ifndef MARINERO_POSITIONING_H
@@ -21,6 +21,9 @@ extern "C" {
 #include "aoa_parse_enum.h"
 #include "marinero_angle.h"
 
+#ifndef M_PI
+    #define M_PI 3.14159265358979323846
+#endif
 
 /***************************************************************************//**
  * Calculate position from angle and distance

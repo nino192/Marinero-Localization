@@ -4,10 +4,10 @@ nodes:
     remappings:
       input_topic: position/ble_pd_804B50549A83
       output_topic_position: ros/position/ble_pd_804B50549A83
-      output_topic_angle: ros/angle/ble_pd_804B50549A83
+      output_topic_angle: ros/compound_angle/ble_pd_804B50549A83
   - name: ble_pd_804B5056BAA0
     namespace: mqtt_parse
     remappings:
       input_topic: position/ble_pd_804B5056BAA0
       output_topic_position: ros/position/ble_pd_804B5056BAA0
-      output_topic_angle: ros/angle/ble_pd_804B5056BAA0
+      output_topic_angle: ros/compound_angle/ble_pd_804B5056BAA0

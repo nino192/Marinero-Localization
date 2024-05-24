@@ -15,6 +15,7 @@ import mpl_toolkits.mplot3d.art3d as art3d
 import numpy as np
 
 from pynput.keyboard import Listener, KeyCode
+from math import sqrt
 
 DEFAULT_CONFIG = os.path.join(os.path.dirname(__file__), "config/marinero_locator_config.json")
 DEFAULT_REFERENCES = os.path.join(os.path.dirname(__file__), "config/references.json")
@@ -64,9 +65,11 @@ class Visualizer(object):
         self.colors = ref['colors']
 
     def plot_position(self, data_list, folder=None, filename=None):
-        fig = plt.figure()
-        ax1 = fig.add_subplot(1, 2, 1, projection='3d')
-        ax2 = fig.add_subplot(1, 2, 2)
+        fig1 = plt.figure()
+        fig2 = plt.figure()
+        ax1 = fig1.add_subplot(1, 2, 1, projection='3d')
+        ax2 = fig1.add_subplot(1, 2, 2)
+        ax3 = fig2.add_subplot(1, 1, 1)
 
         legend_labels = []
         legend_colors = []
@@ -75,8 +78,13 @@ class Visualizer(object):
         if len(self.position_references) != self.num_tags:
             raise ConfigError(f"Number of references is not equal to -num of tags specified ({self.num_tags}).", self.num_tags)
 
+        error_list = []
+
         for i, tag_list in enumerate(data_list.values()):
             color = self.colors[i]
+            x_ref = self.position_references[i][0]
+            y_ref = self.position_references[i][1]
+            z_ref = self.position_references[i][2]
             for j in range(self.iterations):
                 x = tag_list[j].get('x')
                 y = tag_list[j].get('y')
@@ -90,6 +98,9 @@ class Visualizer(object):
                 y_values = np.linspace(-2.5, 2.5, 100)
                 z_values = slope * y_values
                 ax2.plot(y_values, z_values, color=color, linewidth=1)
+
+                error = sqrt(((x - x_ref) ** 2) * ((y - y_ref) ** 2) * ((z - z_ref) ** 2))
+                error_list.append(error)
 
             keys = list(data_list.keys())
             legend_labels.append(keys[i])
@@ -106,9 +117,18 @@ class Visualizer(object):
         for reference in self.position_references:
             ax1.scatter(reference[0], reference[1], reference[2], color='r', label='ref')
             ax2.scatter(reference[1], reference[2], color='r', label='ref')
+        
+        ##########CDF PLOT#########
+
+        error_array = np.array(error_list)
+        errors_array_sorted = np.sort(error_array)
+        cdf_azimuth = np.arange(1, len(errors_array_sorted) + 1) / len(errors_array_sorted)
+        ax3.plot(errors_array_sorted, cdf_azimuth, marker='.', linestyle='none'), 
+
+        ###########################
+
         legend_labels.append('ref')
         legend_colors.append('r')
-
         custom_legend = [plt.Line2D([0], [0], marker='o', color='w', label=label,
                                      markerfacecolor=color, markersize=10) 
                          for label, color in zip(legend_labels, legend_colors)]
@@ -128,8 +148,13 @@ class Visualizer(object):
         ax2.set_ylim(0, 5)                          #correspond to position reference list
         ax2.grid(True)
 
-        fig.subplots_adjust(left=0.05, right=0.8)
-        fig.legend(handles=custom_legend, loc='upper left', bbox_to_anchor=(0.8, 0.5), title='Tags')
+        ax3.set_xlabel('Error (m)')
+        ax3.set_ylabel('Probability')
+        ax3.set_title('CDF Position')
+        ax3.grid(True)
+
+        fig1.subplots_adjust(left=0.05, right=0.8)
+        fig1.legend(handles=custom_legend, loc='upper left', bbox_to_anchor=(0.8, 0.5), title='Tags')
 
         plt.show()
 

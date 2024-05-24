@@ -64,7 +64,8 @@ $(SDK_DIR)/app/bluetooth/common/ncp_user_cmd \
 $(SDK_DIR)/platform/common/inc \
 $(SDK_DIR)/protocol/bluetooth/inc \
 $(SDK_DIR)/app/bluetooth/marinero_bt_AoA_host/position \
-$(SDK_DIR)/app/bluetooth/marinero_bt_AoA_host/angle
+$(SDK_DIR)/app/bluetooth/marinero_bt_AoA_host/angle \
+$(SDK_DIR)/app/bluetooth/marinero_bt_AoA_host/distance 
 
 
 
@@ -82,6 +83,7 @@ $(SDK_DIR)/app/bluetooth/common_host/aoa_db/aoa_db.c \
 $(SDK_DIR)/app/bluetooth/common_host/system/system.c \
 $(SDK_DIR)/app/bluetooth/marinero_bt_AoA_host/position/marinero_positioning.c \
 $(SDK_DIR)/app/bluetooth/marinero_bt_AoA_host/angle/marinero_angle.c \
+$(SDK_DIR)/app/bluetooth/marinero_bt_AoA_host/distance/marinero_distance.c \
 app.c \
 main.c
 

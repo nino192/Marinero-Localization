@@ -67,11 +67,14 @@ class Visualizer(object):
         self.distance_references = ref['distance_references']
 
     def plot_angle(self, data_list):
-        fig = plt.figure()
-        gs = fig.add_gridspec(2, 2)
-        ax1 = fig.add_subplot(gs[0, 0])
-        ax2 = fig.add_subplot(gs[0, 1])
-        ax3 = fig.add_subplot(gs[1, :])
+        fig1 = plt.figure()
+        fig2 = plt.figure()
+        gs = fig1.add_gridspec(2, 2)
+        ax1 = fig1.add_subplot(gs[0, 0])
+        ax2 = fig1.add_subplot(gs[0, 1])
+        ax3 = fig1.add_subplot(gs[1, :])
+        ax4 = fig2.add_subplot(1, 2, 1)
+        ax5 = fig2.add_subplot(1, 2, 2)
 
         #error checking (if reference angles are in mask ranges)
         for element in self.azimuth_masks:
@@ -87,8 +90,13 @@ class Visualizer(object):
         if (len(self.azimuth_references) or len(self.elevation_references) or len(self.distance_references)) != self.multi_reference:
             raise ConfigError(f"Number of references is not equal to -mul specified ({self.multi_reference}).", self.multi_reference)
         
+        errors_az_list = []
+        errors_el_list = []
+
         for i in range(self.multi_reference):
             data_chunk = data_list[i * self.iterations:(i + 1) * self.iterations]
+            ref_az = np.mod(self.azimuth_references[i] + 180, 360) - 180
+            ref_el = self.elevation_references[i]
             for angle in data_chunk:
                 azimuth = angle.get('azimuth')
                 elevation = angle.get('elevation')
@@ -96,10 +104,27 @@ class Visualizer(object):
                 ax1.scatter(i + 1, azimuth, color='b', marker='_', s=100)
                 ax2.scatter(i + 1, elevation, color='b', marker='_', s=100)   
                 ax3.scatter(i + 1, distance, color='b', marker='o')
+                diff_az = ref_az - (np.mod(azimuth + 180, 360) - 180)
+                error_az = np.mod(diff_az + 180, 360) - 180
+                errors_az_list.append(abs(error_az))
+                errors_el_list.append(abs(ref_el - elevation))
           
         ax1.step([i + 1 for i in range(len(self.azimuth_references))], self.azimuth_references, where='mid', color ='r', linewidth=2)
         ax2.step([i + 1 for i in range(len(self.elevation_references))], self.elevation_references, where='mid', color ='r', linewidth=2)
         ax3.step([i + 1 for i in range(len(self.distance_references))], self.distance_references, where='mid', color='r', linewidth=2)
+
+        ##########CDF PLOT#########
+
+        errors_az_array = np.array(errors_az_list)
+        errors_el_array = np.array(errors_el_list)
+        errors_az_array_sorted = np.sort(errors_az_array)
+        errors_el_array_sorted = np.sort(errors_el_array)
+        cdf_azimuth = np.arange(1, len(errors_az_array_sorted) + 1) / len(errors_az_array_sorted)
+        cdf_elevation = np.arange(1, len(errors_el_array_sorted) + 1) / len(errors_el_array_sorted)
+        ax4.plot(errors_az_array_sorted, cdf_azimuth, marker='.', linestyle='none'), 
+        ax5.plot(errors_el_array_sorted, cdf_elevation, marker='.', linestyle='none')
+
+        ###########################
 
         custom_legend_1 = [Line2D([0], [0], color='r', lw=2, label='ref_azimuth'),
                  Line2D([0], [0], color='b', lw=1, label='rec_azimuth')]
@@ -133,6 +158,16 @@ class Visualizer(object):
         ax3.grid(True)
         ax3.legend(handles=custom_legend_3, loc='upper right')
         ax3.set_title('Distance Plot')
+
+        ax4.set_xlabel('Error (°)')
+        ax4.set_ylabel('Probability')
+        ax4.set_title('CDF Azimuth')
+        ax4.grid(True)
+
+        ax5.set_xlabel('Error (°)')
+        ax5.set_ylabel('Probability')
+        ax5.set_title('CDF Elevation')
+        ax5.grid(True)
 
         plt.show()
 
