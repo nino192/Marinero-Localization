@@ -21,7 +21,7 @@ class DetectClosest : public rclcpp::Node
             size_t pos = topic_name.rfind("/");
             std::string tag_id = topic_name.substr(pos + 1);
 
-            if (topic_name.find("/ros/angle") == 0)
+            if (topic_name.find("/ros/compound_angle") == 0)
             {
                 RCLCPP_INFO(get_logger(), "Subscribing to topic: %s", topic_name.c_str());
                 auto sub = this->create_subscription<std_msgs::msg::Float32>(

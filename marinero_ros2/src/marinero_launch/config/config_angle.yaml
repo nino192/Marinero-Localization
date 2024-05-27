@@ -1,11 +1,11 @@
 nodes:
   - name: ble_pd_804B50549A83
-    namespace: mqtt_parse
+    namespace: mqtt_parse_angle
     remappings:
       input_topic: angles/ble_pd_804B50549A83
       output_topic: ros/aoa/ble_pd_804B50549A83
   - name: ble_pd_804B5056BAA0
-    namespace: mqtt_parse
+    namespace: mqtt_parse_angle
     remappings:
       input_topic: angles/ble_pd_804B5056BAA0
       output_topic: ros/aoa/ble_pd_804B5056BAA0
