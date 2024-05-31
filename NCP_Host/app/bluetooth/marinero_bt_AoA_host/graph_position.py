@@ -123,7 +123,7 @@ class Visualizer(object):
         error_array = np.array(error_list)
         errors_array_sorted = np.sort(error_array)
         cdf_azimuth = np.arange(1, len(errors_array_sorted) + 1) / len(errors_array_sorted)
-        ax3.plot(errors_array_sorted, cdf_azimuth, marker='.', linestyle='none'), 
+        ax3.plot(errors_array_sorted, cdf_azimuth, marker='.', linestyle='none')
 
         ###########################
 

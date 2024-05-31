@@ -29,7 +29,7 @@ enum sl_rtl_error_code marinero_position(aoa_state_t *aoa_state,
 
   switch(angle_mode){
     case (RTL):
-      //ec = calculate_avg_RSSI(iq_report);
+      ec = calculate_avg_RSSI(iq_report);
 
       ec = aoa_calculate(aoa_state,
                         iq_report,
@@ -49,7 +49,7 @@ enum sl_rtl_error_code marinero_position(aoa_state_t *aoa_state,
       sum_d += angle->distance;
       mean_d = sum_d/(d_count);
       if (d_count > 10){
-        stdev_d = sqrt((pow(((angle->distance) - mean_d),2)) / (d_count - 1));
+        stdev_d = sqrt((pow(((angle->distance) - mean_d), 2)) / (d_count - 1));
         angle->distance_stdev = stdev_d;
       }
       break;
@@ -60,6 +60,7 @@ enum sl_rtl_error_code marinero_position(aoa_state_t *aoa_state,
     default:
       break;
   }
+  
   //call na position_calculate
   ec = marinero_position_calculate(aoa_state, 
                                    angle,

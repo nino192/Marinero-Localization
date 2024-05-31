@@ -7,6 +7,10 @@ extern "C" {
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <math.h>
+
 #include "aoa_types.h"
 #include "sl_rtl_clib_api.h"
 
