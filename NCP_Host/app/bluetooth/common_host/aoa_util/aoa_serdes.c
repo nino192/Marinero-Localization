@@ -61,6 +61,8 @@ sl_status_t aoa_serialize_iq_report(aoa_iq_report_t *iq_report, char **str)
   CHECK_NULL_RETURN(obj, SL_STATUS_FAIL);
   obj = cJSON_AddNumberToObject(root, "rssi", (int)iq_report->rssi);
   CHECK_NULL_RETURN(obj, SL_STATUS_FAIL);
+  obj = cJSON_AddNumberToObject(root, "avg_rssi", (float)iq_report->avg_rssi);
+  CHECK_NULL_RETURN(obj, SL_STATUS_FAIL);
   obj = cJSON_AddNumberToObject(root, "sequence", (int)iq_report->event_counter);
   CHECK_NULL_RETURN(obj, SL_STATUS_FAIL);
   for (int i = 0; i < iq_report->length; i++) {

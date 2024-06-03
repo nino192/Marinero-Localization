@@ -58,6 +58,7 @@
 
 //marinero
 #include "marinero_positioning.h"
+#include "marinero_distance.h"
 
 // Optstring argument for getopt.
 #define OPTSTRING      NCP_HOST_OPTSTRING APP_LOG_OPTSTRING "m:c:h"
@@ -379,6 +380,8 @@ void aoa_cte_on_iq_report(aoa_db_entry_t *tag, aoa_iq_report_t *iq_report)
     case (IQ_REPORT):
       size = sizeof(AOA_TOPIC_IQ_REPORT_PRINT);
       topic_template = AOA_TOPIC_IQ_REPORT_PRINT;
+
+      ec = calculate_avg_RSSI(iq_report);    //dodano
 
       // Compile payload
       sc = aoa_serialize_iq_report(iq_report, &payload);

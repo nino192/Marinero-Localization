@@ -40,6 +40,7 @@ typedef char aoa_id_t[AOA_ID_MAX_SIZE];
 typedef struct aoa_iq_report_s {
   uint8_t channel;
   int8_t rssi;
+  float avg_rssi;
   uint16_t event_counter;
   uint8_t length;
   int8_t *samples;

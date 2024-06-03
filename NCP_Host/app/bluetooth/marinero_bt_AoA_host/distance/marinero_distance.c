@@ -6,7 +6,7 @@ enum sl_rtl_error_code calculate_avg_RSSI(aoa_iq_report_t *iq_report)
 {
   enum sl_rtl_error_code ec;
 
-  int rssi_first_antenna = iq_report->rssi;
+  int rssi_preamble = iq_report->rssi;
   int num_antennas = ANTENNA_ARRAY_MAX_PIN_PATTERN_SIZE;              //for BRD4191A
   int num_ref_samples = ANTENNA_ARRAY_MAX_PATTERN_SIZE - 2;          // ovdje uzimam od 14 clana iq reporta pa nadalje
   int antenna_samples[(num_antennas - 1) * 2];
@@ -37,7 +37,7 @@ enum sl_rtl_error_code calculate_avg_RSSI(aoa_iq_report_t *iq_report)
   }
 
   double reference_power = powers[0];
-  double reference_rssi = (double)rssi_first_antenna;
+  double reference_rssi = (double)rssi_preamble;
   double reference_power_dbm = 10.0 * log10(reference_power);
 
   // Calculate RSSI for each antenna based on the reference
@@ -50,7 +50,7 @@ enum sl_rtl_error_code calculate_avg_RSSI(aoa_iq_report_t *iq_report)
   for (int i = 0; i < num_antennas; i++) {
     sum_rssi += rssi_values[i];
   }
-  double average_rssi = sum_rssi / num_antennas;
+  //double average_rssi = sum_rssi / num_antennas;
 
   // Calculate weighted average RSSI
   double rssi_min = rssi_values[0];
@@ -69,9 +69,31 @@ enum sl_rtl_error_code calculate_avg_RSSI(aoa_iq_report_t *iq_report)
   for (int i = 0; i < num_antennas; i++) {
     average_rssi_weighted += ((rssi_values[i] - rssi_min) / denom) * rssi_values[i];
   }
+  
 
-  // Add new RSSI to packet
-  iq_report->rssi = round(average_rssi_weighted);
+  //RSSI filtering
+  static int C_threshold = 5;               //proizvoljno, 5 puta za redom veci measurement, onda update
+  static int RSSI_avg_threshold_diff = 5;   //proizvoljno, measurement je različit za 5 dBm izmedu proslog i sadasnjeg avg
+  static int RSSI_threshold_diff = 8;       //proizvoljno, measurement je različit za 8 dBm izmedu preambla i avg (cca 1m)
+  static double last_valid_rssi = 0.0;
+  static int count = 0;
+
+  if (fabs(average_rssi_weighted - rssi_preamble) < RSSI_threshold_diff){
+    // Add new RSSI to packet
+    if (fabs(average_rssi_weighted - last_valid_rssi) < RSSI_avg_threshold_diff || count > C_threshold){
+      count = 0;
+      iq_report->avg_rssi = average_rssi_weighted;
+      last_valid_rssi = average_rssi_weighted;
+    } else {
+      // Skip irregular measurement
+      count++;
+      iq_report->avg_rssi = last_valid_rssi;
+    }
+  } else {
+    // Discard measurement
+    iq_report->avg_rssi = last_valid_rssi;
+  }
+
   //iq_report->rssi = round(average_rssi);      //use non-weighted RSSI
 
   free(powers);
