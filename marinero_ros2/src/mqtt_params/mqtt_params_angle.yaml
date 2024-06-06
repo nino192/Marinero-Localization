@@ -8,10 +8,21 @@ mqtt_client:
         mqtt_topics: 
           - silabs/aoa/angle/ble-pd-0C4314F46B72/ble-pd-804B5056BAA0
           - silabs/aoa/angle/ble-pd-0C4314F46B72/ble-pd-804B50549A83
+          - silabs/aoa/angle/ble-pd-0C4314F46B72/ble-pd-60A423C98862
+          - silabs/aoa/angle/ble-pd-0C4314F46B72/ble-pd-60A423C997C2
+          - silabs/aoa/angle/ble-pd-0C4314F46B72/ble-pd-842E1431BC70
         silabs/aoa/angle/ble-pd-0C4314F46B72/ble-pd-804B5056BAA0:
           ros_topic: /angles/ble_pd_804B5056BAA0
           primitive: true
         silabs/aoa/angle/ble-pd-0C4314F46B72/ble-pd-804B50549A83:
           ros_topic: /angles/ble_pd_804B50549A83
           primitive: true
-          
+        silabs/aoa/angle/ble-pd-0C4314F46B72/ble-pd-60A423C98862:
+          ros_topic: /angles/ble_pd_60A423C98862
+          primitive: true
+        silabs/aoa/angle/ble-pd-0C4314F46B72/ble-pd-60A423C997C2:
+          ros_topic: /angles/ble_pd_60A423C997C2
+          primitive: true
+        silabs/aoa/angle/ble-pd-0C4314F46B72/ble-pd-842E1431BC70:
+          ros_topic: /angles/ble_pd_842E1431BC70
+          primitive: true
