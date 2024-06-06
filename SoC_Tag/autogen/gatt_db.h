@@ -23,12 +23,12 @@ extern const sli_bt_gattdb_t gattdb;
 #define gattdb_ota                            25
 #define gattdb_ota_control                    27
 #define gattdb_cte                            28
-#define gattdb_adv_cte_min_len                30
-#define gattdb_adv_cte_min_tx_count           32
-#define gattdb_adv_cte_tx_duration            34
-#define gattdb_adv_cte_interval               36
-#define gattdb_adv_cte_phy                    38
-#define gattdb_cte_enable                     40
+#define gattdb_cte_enable                     30
+#define gattdb_adv_cte_min_len                32
+#define gattdb_adv_cte_min_tx_count           34
+#define gattdb_adv_cte_tx_duration            36
+#define gattdb_adv_cte_interval               38
+#define gattdb_adv_cte_phy                    40
 
 
 #endif // __GATT_DB_H
