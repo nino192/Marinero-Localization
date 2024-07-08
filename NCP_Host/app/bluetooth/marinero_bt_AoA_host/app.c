@@ -391,6 +391,8 @@ void aoa_cte_on_iq_report(aoa_db_entry_t *tag, aoa_iq_report_t *iq_report)
       size = sizeof(AOA_TOPIC_ANGLE_PRINT);
       topic_template = AOA_TOPIC_ANGLE_PRINT;
 
+      ec = calculate_avg_RSSI(iq_report);
+
       ec = aoa_calculate((aoa_state_t *)tag->user_data,
                         iq_report,
                         &angle,
@@ -410,6 +412,7 @@ void aoa_cte_on_iq_report(aoa_db_entry_t *tag, aoa_iq_report_t *iq_report)
       // Compile payload
       sc = aoa_serialize_angle(&angle, &payload);
       break;
+
     //POSITION_REPORT mode
     default:
       size = sizeof(AOA_TOPIC_POSITION_PRINT);

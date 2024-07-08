@@ -23,7 +23,7 @@ include:
 - path: ''
   file_list:
   - {path: app.h}
-sdk: {id: gecko_sdk, version: 4.4.1}
+sdk: {id: gecko_sdk, version: 4.4.3}
 toolchain_settings: []
 component:
 - {id: BGM220PC22HNA}
@@ -42,7 +42,7 @@ component:
 - {id: component_catalog}
 - {id: gatt_configuration}
 - {id: gatt_service_cte}
-- {id: gatt_service_cte_silabs}
+- {id: gatt_service_cte_connectionless}
 - {id: gatt_service_device_information}
 - {id: in_place_ota_dfu}
 - {id: mpu}

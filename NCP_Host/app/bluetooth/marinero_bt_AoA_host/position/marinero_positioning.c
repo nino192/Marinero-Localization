@@ -29,7 +29,7 @@ enum sl_rtl_error_code marinero_position(aoa_state_t *aoa_state,
 
   switch(angle_mode){
     case (RTL):
-      ec = calculate_avg_RSSI(iq_report);
+      //ec = calculate_avg_RSSI(iq_report);
 
       ec = aoa_calculate(aoa_state,
                         iq_report,
@@ -90,16 +90,25 @@ enum sl_rtl_error_code marinero_position_calculate(aoa_state_t *aoa_state,
 
   n_pos++;
 
-  //spherical coordinates
+  //Spherical coordinates
   phi = 90 - (angle->elevation);
   theta = 180 + (angle->azimuth);
   rho = (angle->distance);
 
-  //position calculate
+  //Position calculate
   x = rho*sin(phi * M_PI / 180.0) * cos(theta * M_PI / 180.0);
   y = rho*sin(phi * M_PI / 180.0) * sin(theta * M_PI / 180.0);
   z = rho*cos(phi * M_PI / 180.0);
+
+  //Compound angle calculate
+  compound = acos(sin(theta * M_PI / 180.0) * sin(phi * M_PI / 180.0)) * (180.0 / M_PI);
   
+  //Assign values
+  position->x = x;
+  position->y = y;
+  position->z = z;
+  position->compound = compound;
+
   //standard deviation calculate, first 10 data points rejected
   sum_x += x;
   mean_x = sum_x/(n_pos);
@@ -109,15 +118,6 @@ enum sl_rtl_error_code marinero_position_calculate(aoa_state_t *aoa_state,
 
   sum_z += z;
   mean_z = sum_z/(n_pos);
-
-  //compound angle calculate
-  compound = acos(sin(theta * M_PI / 180.0) * sin(phi * M_PI / 180.0)) * (180.0 / M_PI);
-
-  //assign values
-  position->x = x;
-  position->y = y;
-  position->z = z;
-  position->compound = compound;
 
   if (n_pos > 10){
     stdev_x = sqrt((pow((x - mean_x),2))/ (n_pos-1));

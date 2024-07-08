@@ -37,6 +37,7 @@
         "aoa_db.h": "c",
         "aoa_topics.h": "c",
         "aoa_parse_cte.h": "c",
-        "marinero_distance.h": "c"
+        "marinero_distance.h": "c",
+        "sli_bt_api.h": "c"
     }
 }
