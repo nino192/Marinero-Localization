@@ -3,7 +3,7 @@ Code in this repo implements a single-anchor solution for identification and loc
 * BG22-PK6022A from *SiliconLabs*, as a BLE reciever: https://www.silabs.com/development-tools/wireless/bluetooth/bgm22-pro-kit?tab=overview
 * BGM220-EK4314A from *SiliconLabs*, as a BLE transmitter: https://www.silabs.com/development-tools/wireless/bluetooth/bgm220-explorer-kit?tab=overview
 The block diagram of this application is shown in the image below:
-
+![blok-dijagram](https://github.com/user-attachments/assets/99051183-7484-49e9-87b9-68bd66aacce9)
 ## Repository components
 ### NCP_Host
 ### NCP_Target
