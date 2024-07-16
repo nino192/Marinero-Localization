@@ -1,5 +1,10 @@
 # Marinero identification and localization
-Code in this repo implements a single-anchor solution for identification and localization of ships in a marina using Bluetooth Low Energy technology. Ships are identified and localized using AoA (Angle of Arrival) of the incoming signals from the transmitters placed on them. This code is intended to be used with the following hardware:
+Code in this repo implements a single-anchor solution for identification and localization of ships in a marina using Bluetooth Low Energy technology. Ships are identified and localized using AoA (Angle of Arrival) of the incoming signals from the transmitters placed on them. Following image shows the idea behind ship identification:
+<p align="center">
+  <img width="460" height="500" src="images/identification.png">
+</p>
+
+Code in this repo is intended to be used with the following hardware:
 * BG22-PK6022A from *SiliconLabs*, as a BLE reciever: https://www.silabs.com/development-tools/wireless/bluetooth/bgm22-pro-kit?tab=overview
 * BGM220-EK4314A from *SiliconLabs*, as a BLE transmitter: https://www.silabs.com/development-tools/wireless/bluetooth/bgm220-explorer-kit?tab=overview
 
@@ -8,6 +13,7 @@ The block diagram of this application is shown in the image below:
 <p align="center">
   <img width="460" height="650" src="images/block-diagram.png">
 </p>
+
 
 ## Repository components
 ### NCP_Host
@@ -80,5 +86,5 @@ ros2 launch marinero_launch parser_launch.py "mode:='angle'"
 ros2 run marinero_detect detect_closest
 ```
 ## Configuration files
-
+Configuration file ```marinero_locator_config.json``` located in ```Marinero-Localization/NCP_Host/app/bluetooth/marinero_bt_AoA_host/config``` folder describes parameters of the BLE reciever.
 ## Resources
