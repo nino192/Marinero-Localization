@@ -23,43 +23,27 @@ enum sl_rtl_error_code marinero_position(aoa_state_t *aoa_state,
                                          aoa_angle_mode_t angle_mode)
 {
   enum sl_rtl_error_code ec;
-  static unsigned int d_count;
-  static float sum_d, stdev_d;
-  static float mean_d;
+  
+  if (angle_mode == RTL) {
 
-  switch(angle_mode){
-    case (RTL):
-      //ec = calculate_avg_RSSI(iq_report);
+    // Average RSSI over all antennas calculation
+    ec = calculate_avg_RSSI(iq_report);
 
-      ec = aoa_calculate(aoa_state,
-                        iq_report,
-                        angle,
-                        config_id);
+    // Calculate AoA using the provided AoA state and IQ report.
+    ec = aoa_calculate(aoa_state, iq_report, angle, config_id);
 
-      if (ec == SL_RTL_ERROR_ESTIMATION_IN_PROGRESS) {
-            // No valid angles are available yet.
-            return ec;
-          } 
-          app_assert(ec == SL_RTL_ERROR_SUCCESS,
-                    "[E: %d] Failed to calculate angle." APP_LOG_NL,
-                    ec);
-                    
-      //distance stdev, reject first 10 data points
-      d_count++;
-      sum_d += angle->distance;
-      mean_d = sum_d/(d_count);
-      if (d_count > 10){
-        stdev_d = sqrt((pow(((angle->distance) - mean_d), 2)) / (d_count - 1));
-        angle->distance_stdev = stdev_d;
-      }
-      break;
-    case (MUSIC):
-      marinero_MUSIC();
-      break;
-      //imple error checkinga
-    default:
-      break;
-  }
+    // Check if the estimation is still in progress.
+    if (ec == SL_RTL_ERROR_ESTIMATION_IN_PROGRESS) {
+      // No valid angles are available yet.
+      return ec;
+    }
+
+      // Ensure that the angle calculation was successful.
+      app_assert(ec == SL_RTL_ERROR_SUCCESS, "[E: %d] Failed to calculate angle." APP_LOG_NL, ec);
+
+} else {
+    // Future AoA algorithms imple
+}
   
   //call na position_calculate
   ec = marinero_position_calculate(aoa_state, 
@@ -109,7 +93,7 @@ enum sl_rtl_error_code marinero_position_calculate(aoa_state_t *aoa_state,
   position->z = z;
   position->compound = compound;
 
-  //standard deviation calculate, first 10 data points rejected
+  //Standard deviation calculate, first 10 data points rejected
   sum_x += x;
   mean_x = sum_x/(n_pos);
 

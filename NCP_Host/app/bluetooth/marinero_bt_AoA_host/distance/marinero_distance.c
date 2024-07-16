@@ -1,3 +1,8 @@
+/***************************************************************************//**
+ * @file
+ * @brief Distance calculation and RSSI filtering
+ *******************************************************************************/
+
 #include "marinero_distance.h"
 #include "marinero_positioning.h"
 #include "antenna_array.h"
@@ -8,7 +13,7 @@ enum sl_rtl_error_code calculate_avg_RSSI(aoa_iq_report_t *iq_report)
   enum sl_rtl_error_code ec;
 
   int rssi_preamble = iq_report->rssi;
-  int num_antennas = ANTENNA_ARRAY_MAX_PIN_PATTERN_SIZE;              //for BRD4191A
+  int num_antennas = ANTENNA_ARRAY_MAX_PIN_PATTERN_SIZE;             //for BRD4191A
   int num_ref_samples = ANTENNA_ARRAY_MAX_PATTERN_SIZE - 2;          // ovdje uzimam od 14 clana iq reporta pa nadalje
   int antenna_samples[(num_antennas - 1) * 2];
 
@@ -72,9 +77,9 @@ enum sl_rtl_error_code calculate_avg_RSSI(aoa_iq_report_t *iq_report)
   
 
   //RSSI threshold filtering
-  static int C_threshold = 5;                                                                                //proizvoljno, 5 puta za redom veci measurement, onda update
-  static int RSSI_avg_threshold_diff = 5;                                                                     //proizvoljno, measurement je različit za 5 dBm izmedu proslog i sadasnjeg avg
-  static int RSSI_threshold_diff = 8;                                                                         //proizvoljno, measurement je različit za 8 dBm izmedu preambla i avg (cca 1m)
+  static int C_threshold = 5;                         //proizvoljno, 5 puta za redom veci measurement, onda update
+  static int RSSI_avg_threshold_diff = 5;             //proizvoljno, measurement je različit za 5 dBm izmedu proslog i sadasnjeg avg
+  static int RSSI_threshold_diff = 8;                 //proizvoljno, measurement je različit za 8 dBm izmedu preambla i avg
   static double last_valid_rssi = 0.0;
   static int count = 0;
 
@@ -97,8 +102,6 @@ enum sl_rtl_error_code calculate_avg_RSSI(aoa_iq_report_t *iq_report)
   if (iq_report->avg_rssi == 0){
     iq_report->avg_rssi = rssi_preamble;
   }
-
-  //iq_report->rssi = round(average_rssi);      //use non-weighted RSSI
 
   free(powers);
   free(rssi_values);

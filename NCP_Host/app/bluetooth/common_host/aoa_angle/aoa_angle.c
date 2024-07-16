@@ -428,12 +428,13 @@ enum sl_rtl_error_code aoa_calculate(aoa_state_t *aoa_state,
                                                     &angle->elevation_stdev);
   CHECK_ERROR(ec);
 
-  // Calculate distance from RSSI.
+  //Calculate distance from RSSI.
   // ec = sl_rtl_util_rssi2distance(AOA_ANGLE_TAG_TX_POWER,
-  //                                (float)iq_report->avg_rssi,    //avg_rssi ako zelim filter
+  //                                (float)iq_report->avg_rssi,
   //                                &angle->distance);
   // CHECK_ERROR(ec);
 
+  //Calculate distance from RSSI.
   marinero_calculate_distance((float)iq_report->avg_rssi,
                     &angle->distance); 
 
