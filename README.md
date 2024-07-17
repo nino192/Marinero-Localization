@@ -39,6 +39,7 @@ Requirements:
 * eclipse mosquitto - https://mosquitto.org/
 * SimplicityStudiov5 (for flashing) - https://www.silabs.com/developers/simplicity-studio
 * mqtt_client (bridge between mqtt and ros2) - https://github.com/ika-rwth-aachen/mqtt_client
+* mosquitto libraries - ```sudo apt install libmosquitto-dev```
 
 Optional:
 * mqtt-explorer (viewing data being published to mosquitto) - http://mqtt-explorer.com/
@@ -86,5 +87,5 @@ ros2 launch marinero_launch parser_launch.py "mode:='angle'"
 ros2 run marinero_detect detect_closest
 ```
 ## Configuration files
-Configuration file ```marinero_locator_config.json``` located in ```Marinero-Localization/NCP_Host/app/bluetooth/marinero_bt_AoA_host/config``` folder describes parameters of the BLE reciever.
+Configuration file ```marinero_locator_config.json``` located in ```Marinero-Localization/NCP_Host/app/bluetooth/marinero_bt_AoA_host/config``` folder describes parameters of the BLE reciever. 
 ## Resources
