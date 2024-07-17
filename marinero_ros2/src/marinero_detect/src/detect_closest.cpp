@@ -12,12 +12,16 @@ class DetectClosest : public rclcpp::Node
   public:
     DetectClosest() : Node("detection_node")
     {
-        auto topics = this->get_topic_names_and_types();
+        std::vector<std::string> topics = {
+            "/ros/compound_angle/ble_pd_60A423C98862",
+            "/ros/compound_angle/ble_pd_60A423C997C2",
+            "/ros/compound_angle/ble_pd_804B50549A83",
+            "/ros/compound_angle/ble_pd_804B5056BAA0",
+            "/ros/compound_angle/ble_pd_842E1431BC70"
+        };
 
-        for (const auto &topic : topics)
+        for (const auto &topic_name : topics)
         {
-            const std::string &topic_name = topic.first;
-
             size_t pos = topic_name.rfind("/");
             std::string tag_id = topic_name.substr(pos + 1);
 
