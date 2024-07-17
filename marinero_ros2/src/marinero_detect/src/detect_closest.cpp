@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "rclcpp/rclcpp.hpp"
-#include "std_msgs/msg/string.hpp"
+#include "std_msgs/msg/header.hpp"
 #include "std_msgs/msg/float32.hpp"
 
 class DetectClosest : public rclcpp::Node
@@ -32,7 +32,7 @@ class DetectClosest : public rclcpp::Node
                 subscriptions_.push_back(sub);
             }
         }
-        publisher_ = this->create_publisher<std_msgs::msg::String>("/ros/closest_tag", 10);
+        publisher_ = this->create_publisher<std_msgs::msg::Header>("/ros/closest_tag", 10);
     }
 
   private:
@@ -42,11 +42,11 @@ class DetectClosest : public rclcpp::Node
         RCLCPP_INFO(get_logger(), "Publishing tag_id..");
         publisher_->publish(closest_tag_id);
     }
-    void calculateClosest(const float &data, std::string tag_id, std_msgs::msg::String &tag_msg)
+    void calculateClosest(const float &data, std::string tag_id, std_msgs::msg::Header &tag_msg)
     {
         float difference = std::abs(data - 90);
 
-        if (tag_msg.data == tag_id)
+        if (tag_msg.frame_id == tag_id)
         {
             min_diff = difference;
             RCLCPP_INFO(get_logger(), "Closest tag remained the same.");
@@ -55,17 +55,18 @@ class DetectClosest : public rclcpp::Node
         {
             if (difference < min_diff)
             {
-                tag_msg.data = tag_id;
+                tag_msg.frame_id = tag_id;
                 min_diff = difference;
                 RCLCPP_INFO(get_logger(), "Closest tag changed. New closest: %s", tag_id.c_str());
             }
         }
+        tag_msg.stamp = this->get_clock()->now();
     }
 
-    rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
+    rclcpp::Publisher<std_msgs::msg::Header>::SharedPtr publisher_;
     std::vector<rclcpp::Subscription<std_msgs::msg::Float32>::SharedPtr> subscriptions_;
     double min_diff = 1000.0;
-    std_msgs::msg::String closest_tag_id;
+    std_msgs::msg::Header closest_tag_id;
 };
 
 int main(int argc, char * argv[])
