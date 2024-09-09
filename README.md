@@ -88,4 +88,32 @@ ros2 run marinero_detect detect_closest
 ```
 ## Configuration files
 Configuration file ```marinero_locator_config.json``` located in ```Marinero-Localization/NCP_Host/app/bluetooth/marinero_bt_AoA_host/config``` folder describes parameters of the BLE reciever. 
+Notable parameters are: 
+
+"cteMode" - describes the current BLE connection mode, can be:
+
+- CONN - standard BLE connection is established between devices  
+- CONNLESS - BLE connection is not established, CTE info is sent via advertising packets  
+- SILABS - BLE connection is not established, CTE info is sent periodically via advertising packets
+
+"cteLength" - length of the CTE in microseconds, length (μs) = cteLength * 8
+
+"reportMode" - can be either IQ, ANGLE or POSITION; describes which data will be published on MQTT broker
+
+"allowList" - IDs of tags which reciever recognizes
+
+"azimuthMask" - describes an angle range in which azimuth angles are discarded
+
+"elevationMask" - describes an angle range in which elevation angles are discarded
+
 ## Resources
+
+This project is a part of my master thesis which can be found here:
+
+https://repozitorij.fsb.unizg.hr/islandora/object/fsb%3A10844
+
+SiliconLabs hardware datasheets can be found here:
+
+https://www.silabs.com/development-tools/wireless/bluetooth/bgm220-explorer-kit?tab=overview  
+https://www.silabs.com/development-tools/wireless/bluetooth/bgm22-pro-kit?tab=overview
+
