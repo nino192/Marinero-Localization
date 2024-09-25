@@ -24,3 +24,4 @@ nodes:
     remappings:
       input_topic: angles/ble_pd_842E1431BC70
       output_topic: ros/aoa/ble_pd_842E1431BC70
+

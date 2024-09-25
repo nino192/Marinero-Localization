@@ -36,6 +36,7 @@
 #include "aoa_angle.h"
 #include "aoa_angle_config.h"
 #include "app_log.h"
+#include "marinero_distance.h"
 
 // -----------------------------------------------------------------------------
 // Defines
@@ -427,11 +428,15 @@ enum sl_rtl_error_code aoa_calculate(aoa_state_t *aoa_state,
                                                     &angle->elevation_stdev);
   CHECK_ERROR(ec);
 
-  // Calculate distance from RSSI.
-  ec = sl_rtl_util_rssi2distance(AOA_ANGLE_TAG_TX_POWER,
-                                 (float)iq_report->rssi,
-                                 &angle->distance);
-  CHECK_ERROR(ec);
+  //Calculate distance from RSSI.
+  // ec = sl_rtl_util_rssi2distance(AOA_ANGLE_TAG_TX_POWER,
+  //                                (float)iq_report->avg_rssi,
+  //                                &angle->distance);
+  // CHECK_ERROR(ec);
+
+  //Calculate distance from RSSI.
+  marinero_calculate_distance((float)iq_report->avg_rssi,
+                    &angle->distance); 
 
   // Distance standard deviation is not supported, use 0.
   angle->distance_stdev = 0;

@@ -114,7 +114,7 @@ static char *config_file = NULL;
 static antenna_array_board_t board = ANTENNA_ARRAY_BOARD_UNKNOWN;
 
 /**************************************************************************//**
- * Application Init. /zove ju app init iz maina
+ * Application Init. 
  *****************************************************************************/
 void app_init(int argc, char *argv[])
 {
@@ -170,8 +170,8 @@ void app_init(int argc, char *argv[])
   }
 
   // Initialize random generator to generate random antenna pattern.
-  unsigned int seed = time(NULL) + getpid();                               //
-  srand(seed);                                                             //za kalkulaciju angle
+  unsigned int seed = time(NULL) + getpid();                               
+  srand(seed);                                                             
 
   // Initialize NCP connection.
   sc = ncp_host_init();
@@ -217,7 +217,7 @@ void app_deinit(void)
  * Bluetooth stack event handler.
  * This overrides the dummy weak implementation.
  *
- * @param[in] evt Event coming from the Bluetooth stack.   /zove ju main, sl_system_process_action->sl_bt_step->sl_bt_on_evt
+ * @param[in] evt Event coming from the Bluetooth stack.   
  *****************************************************************************/
 void sl_bt_on_event(sl_bt_msg_t *evt)
 {
@@ -303,7 +303,7 @@ void sl_bt_on_event(sl_bt_msg_t *evt)
 }
 
 /**************************************************************************//**
- * Subscribe for config topic.  /zove ju ovdje u fileu, u bt_on_evt
+ * Subscribe for config topic. 
  *****************************************************************************/
 static void subscribe_config(void)
 {
@@ -323,7 +323,7 @@ static void subscribe_config(void)
 }
 
 /**************************************************************************//**
- * Check the received topic                                                               /updatea recieved topic "on the fly", zove ga on_message
+ * Check the received topic                                                               
  *****************************************************************************/
 static sl_status_t check_config_topic(const char* topic)
 {
@@ -343,7 +343,7 @@ static sl_status_t check_config_topic(const char* topic)
 }
 
 /**************************************************************************//**
- * MQTT message arrived callback.                                                           //updatea recieved topic "on the fly", hendla ga mosquitto, mene ne zanima
+ * MQTT message arrived callback.                                                          
  *****************************************************************************/
 static void on_message(mqtt_handle_t *handle,
                        const char *topic,
@@ -361,7 +361,7 @@ static void on_message(mqtt_handle_t *handle,
 }
 
 /**************************************************************************//**
- * IQ report callback. //zove ga aoa_cte_bt_on_event /ovo rasturam
+ * IQ report callback.
  *****************************************************************************/
 void aoa_cte_on_iq_report(aoa_db_entry_t *tag, aoa_iq_report_t *iq_report)
 {
@@ -381,7 +381,8 @@ void aoa_cte_on_iq_report(aoa_db_entry_t *tag, aoa_iq_report_t *iq_report)
       size = sizeof(AOA_TOPIC_IQ_REPORT_PRINT);
       topic_template = AOA_TOPIC_IQ_REPORT_PRINT;
 
-      ec = calculate_avg_RSSI(iq_report);    //dodano
+      //Avg RSSI over all antennas
+      ec = calculate_avg_RSSI(iq_report);   
 
       // Compile payload
       sc = aoa_serialize_iq_report(iq_report, &payload);
@@ -391,6 +392,10 @@ void aoa_cte_on_iq_report(aoa_db_entry_t *tag, aoa_iq_report_t *iq_report)
       size = sizeof(AOA_TOPIC_ANGLE_PRINT);
       topic_template = AOA_TOPIC_ANGLE_PRINT;
 
+      //Avg RSSI over all antennas
+      ec = calculate_avg_RSSI(iq_report);
+
+      //AoA calculation via RTL library, distance calculation via marinero_distance.c
       ec = aoa_calculate((aoa_state_t *)tag->user_data,
                         iq_report,
                         &angle,
@@ -410,11 +415,14 @@ void aoa_cte_on_iq_report(aoa_db_entry_t *tag, aoa_iq_report_t *iq_report)
       // Compile payload
       sc = aoa_serialize_angle(&angle, &payload);
       break;
+
     //POSITION_REPORT mode
     default:
       size = sizeof(AOA_TOPIC_POSITION_PRINT);
       topic_template = AOA_TOPIC_POSITION_PRINT;
 
+      //Transformation of spherical coordinates to cartesian sensor coordinates
+      //done in marinero_positioning.c
       ec = marinero_position((aoa_state_t *)tag->user_data,
                         iq_report,
                         &angle,
@@ -460,7 +468,7 @@ void aoa_cte_on_iq_report(aoa_db_entry_t *tag, aoa_iq_report_t *iq_report)
 }
 
 /**************************************************************************//**
- * Get the board type of the NCP target  //poziva se u sl_bt_on_event
+ * Get the board type of the NCP target
  *
  * @param[out] board_type Board type defined in antenna_array_board_t
  * @return SL_STATUS_OK if successful. Error code otherwise.
@@ -491,7 +499,7 @@ static sl_status_t get_board_type(antenna_array_board_t *board_type)
 }
 
 /**************************************************************************//**
- * Configuration file parser //poziva se u sl_bt_on_event
+ * Configuration file parser
  *****************************************************************************/
 static void parse_config_file(const char *file_name)
 {
@@ -503,7 +511,7 @@ static void parse_config_file(const char *file_name)
 }
 
 /**************************************************************************//**
- * Configuration parser //poziva se u parse_config_file
+ * Configuration parser
  *****************************************************************************/
 static void parse_config(const char *config)
 {
@@ -785,7 +793,7 @@ static void parse_config(const char *config)
 }
 
 /**************************************************************************//**
- * Tag added callback.  //poziva se iz cte_conn_less
+ * Tag added callback. 
  *****************************************************************************/
 void aoa_db_on_tag_added(aoa_db_entry_t *tag)
 {
@@ -815,7 +823,7 @@ void aoa_db_on_tag_added(aoa_db_entry_t *tag)
 }
 
 /**************************************************************************//**
- * Tag removed callback.  //poziva se iz cte_conn_less
+ * Tag removed callback.
  *****************************************************************************/
 void aoa_db_on_tag_removed(aoa_db_entry_t *tag)
 {

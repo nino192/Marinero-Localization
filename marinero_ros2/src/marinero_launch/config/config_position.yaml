@@ -29,3 +29,4 @@ nodes:
       input_topic: position/ble_pd_842E1431BC70
       output_topic_position: ros/position/ble_pd_842E1431BC70
       output_topic_angle: ros/compound_angle/ble_pd_842E1431BC70
+  

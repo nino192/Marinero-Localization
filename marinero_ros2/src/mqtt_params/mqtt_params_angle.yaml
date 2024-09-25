@@ -26,3 +26,4 @@ mqtt_client:
         silabs/aoa/angle/ble-pd-0C4314F46B72/ble-pd-842E1431BC70:
           ros_topic: /angles/ble_pd_842E1431BC70
           primitive: true
+          

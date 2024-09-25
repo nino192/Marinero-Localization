@@ -16,6 +16,8 @@ extern "C" {
 
 enum sl_rtl_error_code calculate_avg_RSSI(aoa_iq_report_t *iq_report);
 
+enum sl_rtl_error_code marinero_calculate_distance(float rssi, float* distance_out);
+
 #ifdef __cplusplus
 };
 #endif

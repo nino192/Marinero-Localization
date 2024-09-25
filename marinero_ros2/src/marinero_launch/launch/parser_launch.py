@@ -73,6 +73,13 @@ def generate_launch_description():
         actions=angle_nodes
     )
 
+    joystick_listener = Node(
+        package='marinero_test',
+        executable='joystick_listener_node',
+        name='joystick_listener_node',
+        output='screen')
+
     return LaunchDescription([mode_launch_arg,
                              load_nodes_position,
-                             load_nodes_angle])
+                             load_nodes_angle,
+                             joystick_listener])

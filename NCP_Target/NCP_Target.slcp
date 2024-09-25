@@ -20,10 +20,10 @@ source:
 - {path: app.c}
 tag: [prebuilt_demo, 'hardware:rf:band:2400']
 include:
-- path: ''
+- path: .
   file_list:
   - {path: app.h}
-sdk: {id: gecko_sdk, version: 4.4.1}
+sdk: {id: gecko_sdk, version: 4.4.4}
 toolchain_settings: []
 component:
 - {id: EFR32BG22C224F512IM40}
