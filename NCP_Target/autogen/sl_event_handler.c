@@ -10,6 +10,7 @@
 #include "sl_device_init_emu.h"
 #include "sl_rail_util_aox.h"
 #include "pa_conversions_efr32.h"
+#include "sl_rail_util_power_manager_init.h"
 #include "btl_interface.h"
 #include "sl_board_control.h"
 #include "sl_sleeptimer.h"
@@ -27,7 +28,6 @@
 #include "sli_protocol_crypto.h"
 #include "sl_power_manager.h"
 #include "sl_cos.h"
-#include "sl_rail_util_power_manager_init.h"
 
 void sl_platform_init(void)
 {
@@ -67,8 +67,8 @@ void sl_stack_init(void)
 {
   sl_rail_util_aox_init();
   sl_rail_util_pa_init();
-  sl_bt_init();
   sl_rail_util_power_manager_init();
+  sl_bt_init();
 }
 
 void sl_internal_app_init(void)

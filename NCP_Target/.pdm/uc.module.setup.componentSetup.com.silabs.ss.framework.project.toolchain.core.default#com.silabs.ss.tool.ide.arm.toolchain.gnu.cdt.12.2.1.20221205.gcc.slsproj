@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="uc.module.setup.componentSetup.com.silabs.ss.framework.project.toolchain.core.default#com.silabs.ss.tool.ide.arm.toolchain.gnu.cdt:12.2.1.20221205.gcc" propertyScope="project">
   <folder name="image">
-    <file name="readme_img0.png" linked="false" uri="studio:/sdk/app/bluetooth/example/bt_aoa_ncp_locator/image/readme_img0.png"/>
-    <file name="readme_img1.png" linked="false" uri="studio:/sdk/app/bluetooth/example/bt_aoa_ncp_locator/image/readme_img1.png"/>
-    <file name="readme_img2.png" linked="false" uri="studio:/sdk/app/bluetooth/example/bt_aoa_ncp_locator/image/readme_img2.png"/>
+    <file name="readme_img0.png" linked="false" uri="studio:/project/image/readme_img0.png"/>
+    <file name="readme_img1.png" linked="false" uri="studio:/project/image/readme_img1.png"/>
+    <file name="readme_img2.png" linked="false" uri="studio:/project/image/readme_img2.png"/>
   </folder>
-  <folder name="gecko_sdk_4.4.1">
+  <folder name="gecko_sdk_4.4.4">
     <folder name="platform">
       <folder name="Device">
         <folder name="SiliconLabs">
@@ -818,10 +818,10 @@
       </folder>
     </folder>
   </folder>
-  <file name="main.c" linked="false" uri="studio:/sdk/app/bluetooth/example/bt_aoa_ncp_locator/main.c"/>
-  <file name="app.c" linked="false" uri="studio:/sdk/app/bluetooth/example/bt_aoa_ncp_locator/app.c"/>
-  <file name="app.h" linked="false" uri="studio:/sdk/app/bluetooth/example/bt_aoa_ncp_locator/app.h"/>
-  <file name="readme.md" linked="false" uri="studio:/sdk/app/bluetooth/example/bt_aoa_ncp_locator/readme.md"/>
+  <file name="main.c" linked="false" uri="studio:/project/main.c"/>
+  <file name="app.c" linked="false" uri="studio:/project/app.c"/>
+  <file name="app.h" linked="false" uri="studio:/project/app.h"/>
+  <file name="readme.md" linked="false" uri="studio:/project/readme.md"/>
   <file name="create_bl_files.bat" generated="true" linked="false"/>
   <file name="create_bl_files.sh" generated="true" linked="false"/>
   <file name="create_bl_files.py" generated="true" linked="false"/>
@@ -881,6 +881,8 @@
   <includePath uri="studio:/sdk/platform/emdrv/uartdrv/inc"/>
   <macroDefinition name="EFR32BG22C224F512IM40"/>
   <macroDefinition name="SL_APP_PROPERTIES"/>
+  <macroDefinition name="SL_BOARD_NAME" value="&quot;BRD4002A&quot;"/>
+  <macroDefinition name="SL_BOARD_REV" value="&quot;A06&quot;"/>
   <macroDefinition name="HARDWARE_BOARD_DEFAULT_RF_BAND_2400"/>
   <macroDefinition name="HARDWARE_BOARD_SUPPORTS_1_RF_BAND"/>
   <macroDefinition name="HARDWARE_BOARD_SUPPORTS_RF_BAND_2400"/>

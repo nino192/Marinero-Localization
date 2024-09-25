@@ -22,11 +22,11 @@
    ],
    "angleFiltering":true,
    "angleFilteringWeight":0.6,
-   "cteMode":"SILABS",
+   "cteMode":"CONNLESS",
    "cteSamplingInterval":3,
    "cteLength":20,
    "slotDuration":1,
-   "reportMode":"POSITION",
+   "reportMode":"ANGLE",
    "angleMode":"RTL",
    "allowList":[
       "ble-pd-804B5056BAA0",
